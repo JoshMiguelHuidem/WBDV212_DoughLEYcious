@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dough LEYcious - Freshly baked cookies made with love. Order now!">
+  <title>Dough Leycious - Home</title>
+
+  <!-- link sa css -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- for icons/emojis -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- for font only -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+
+<body>
+
+<!-- ================= for navigation bar ================= -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.php" class="nav-logo">
+  <img src="images/logo.png" alt="Dough LEYcious Logo" class="nav-logo-img">
+</a>
+
+
+
+      <button class="nav-toggle-btn" type="button" aria-label="Open menu" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.php" class="active">Home</a></li>
+      <li><a href="menu.php">Menu</a></li>
+      <li><a href="aboutus.php">About Us</a></li>
+      <li><a href="contact.php">Contact</a></li>
+      <li><a href="cart.php">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<main class="main-content">
+
+  <!-- ================= header or so called hero section ================= -->
+  <header class="header">
+
+  <div class="carousel">
+
+    <div class="slide active">
+      <img src="images/header.jpg" alt="Cookies 1">
+    </div>
+
+    <div class="slide">
+      <img src="images/header 2.png" alt="Cookies 2">
+    </div>
+
+    <div class="slide">
+      <img src="images/header3.png" alt="Assortment of freshly baked cookies including chocolate chip and oatmeal varieties, displayed on a rustic wooden table in a warm, inviting bakery kitchen, radiating comfort and indulgence">
+    </div>
+  
+  </div>
+
+  <div class="header-overlay">
+    <h1>Dough LEYcious</h1>
+    <p>Baked fresh, delivered with love 🍪</p>
+  </div>
+
+</header>
+
+  <!-- ================= welcome section(pag inopen ito agad makita) ================= -->
+  <section class="home-section">
+    <div class="container">
+      <h2>Welcome to DoughLEYcious</h2>
+      <p>Freshly baked cookies made with love 💛</p>
+      <div class="order-options">
+        <button class="hero-btn" onclick="goToOrderPage()">
+          🛒 Start Ordering
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= additional for homepage design ================= -->
+  <section class="features-section">
+    <div class="container">
+      <h2 class="section-title">Why Choose Us?</h2>
+      <div class="divider"></div>
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">🍪</div>
+          <h3>Freshly Baked</h3>
+          <p>Made fresh every day with the finest ingredients.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💛</div>
+          <h3>Made with Love</h3>
+          <p>Every cookie is baked with passion and care.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>Fast Delivery</h3>
+          <p>Get your cookies delivered straight to your door.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>Top Quality</h3>
+          <p>Only the best ingredients make it into our cookies.</p>
+        </div>
+
+        
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= footer section ================= -->
+<button id="backToTop" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
+  <i class="fas fa-cookie-bite"></i>
+</button>
+
+<footer class="footer">
+  <div class="footer-content">
+
+
+    <div class="footer-section">
+      <h3>Find Us</h3>
+      <div class="socials">
+        <a href="https://www.facebook.com/profile.php?id=61567054065532" 
+           aria-label="Visit our Facebook page">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://www.instagram.com/dough_leycious/" 
+           aria-label="Visit our Instagram page">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="index.php">Home</a>
+      <a href="menu.php">Menu</a>
+      <a href="aboutus.php">About Us</a>
+      <a href="terms.php">Terms and Conditions</a>
+    </div>
+
+    
+  <div class="footer-section">
+    <h3>Contact</h3>
+    <p>📧 <a href="mailto:k.munsayac1109@gmail.com">k.munsayac1109@gmail.com</a></p>
+    <p>📍 Available for delivery</p>
+    <a href="contact.php" class="contact-page-link">💬 Send us a message</a>
+</div>
+
+  </div>
+
+  <hr class="footer-divider">
+
+  <div class="footer-bottom">
+    <p>&copy; 2024 <span>Dough LEYcious</span>. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
