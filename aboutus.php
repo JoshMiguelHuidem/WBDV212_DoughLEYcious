@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dough LEYcious - Learn more about us and our story!">
+  <title>Dough Leycious - About Us</title>
+
+  <!-- link sa css -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- for icons/emojis -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- for font only -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.php" class="nav-logo">
+  <img src="images/logo.png" alt="Dough LEYcious Logo" class="nav-logo-img">
+</a>
+    
+    <button class="nav-toggle-btn" type="button" aria-label="Open menu" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.php">Home</a></li>
+      <li><a href="menu.php">Menu</a></li>
+      <li><a href="aboutus.php">About Us</a></li>
+      <li><a href="contact.php">Contact</a></li>
+      <li><a href="cart.php">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="main-content">
+
+  <!-- ================= about us section/banner ================= -->
+  <div class="about-banner">
+    <div class="about-banner-text">
+      <h1>About Us 🍪</h1>
+      <p>Get to know the people behind every delicious bite!</p>
+    </div>
+  </div>
+
+  <!-- ================= our story section ================= -->
+  <section class="about-section">
+    <div class="container">
+      <div class="about-story">
+
+        <div class="about-story-img">
+          <img src="images/logo.png" 
+               alt="Dough LEYcious Story" 
+               loading="lazy">
+        </div>
+
+        <div class="about-story-text">
+          <h2>Our Story</h2>
+          <div class="divider"></div>
+          <p>
+            The goal of our business is to offer freshly baked, affordable, and high-quality cookies that bring joy to customers. 
+            It aims to build a strong and trusted brand, attract a large customer base through quality and creativity, and expand its reach both online and in local communities.
+          </p>
+          <p>
+            Our business solves the common problem of stale or mass-produced pastries by offering pre-order, freshly baked cookies made specifically for each customer. 
+            Many customers want high-quality treats that are fresh, reliable, and suitable for gifting or special occasions. 
+            By baking per order, we ensure better taste, consistent quality, and a more personalized experience.
+          </p>
+          <p>
+            Our business has faced challenges with sudden short stocks when unexpected increases in orders occur. Because we operate on a pre-order system to ensure all cookies are freshly baked, high demand at short notice can make it difficult to fulfill every request while maintaining consistent quality and freshness. Other challenges include coordinating orders efficiently, managing production schedules, and ensuring timely delivery, especially during peak seasons or special occasions. Despite these hurdles, we continuously improve our processes to meet customer expectations and provide a reliable, high-quality pastry experience.🍪
+          </p>
+          <button class="hero-btn" 
+                  onclick="location.href='menu.php'">
+            🛒 Order Now
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= values/what we stand for section ================= -->
+  <section class="values-section">
+    <div class="container">
+      <h2 class="section-title">What We Stand For</h2>
+      <div class="divider"></div>
+
+      <div class="values-grid">
+
+        <div class="value-card">
+          <div class="value-icon">🌿</div>
+          <h3>Fresh Ingredients</h3>
+          <p>We only use the freshest and finest ingredients in every batch we bake.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">💛</div>
+          <h3>Made with Love</h3>
+          <p>Every cookie is handcrafted with passion, care, and a whole lot of love.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">🤝</div>
+          <h3>Customer First</h3>
+          <p>Your satisfaction is our top priority. We bake to make you smile.</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">✨</div>
+          <h3>Quality Always</h3>
+          <p>We never compromise on quality — every cookie meets our high standards.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= team section(kung sino man mga nag bake ng cookies pag wala owner nalang ilagay) ================= -->
+  <section class="team-section">
+    <div class="container">
+      <h2 class="section-title">Meet the Owner</h2>
+      <div class="divider"></div>
+
+      <div class="team-grid">
+
+        <div class="team-card">
+          <div class="team-img-wrapper">
+            <img src="images/Owner of DoughLEYcious.jpg" 
+                 alt="Team Member 1" 
+                 loading="lazy">
+          </div>
+          <h3>Kirsten Holley Munsayac</h3>
+          <p class="team-role">🍪 Head Baker & Founder</p>
+          <p class="team-desc">The heart and soul behind Dough LEYcious. Ms. Kirsten turns simple ingredients into magic.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TESTIMONIALS SECTION ================= -->
+<section class="testimonials-section">
+  <div class="container">
+    <h2 class="section-title">What Our Customers Say</h2>
+    <div class="divider"></div>
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The best cookies I've ever had! Fresh, delicious, and made with so much love. Highly recommend!"</p>
+        <p class="testimonial-author">— Arvic Pelinta</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Dough LEYcious is my go-to for special occasions. The quality and taste are always amazing!"</p>
+        <p class="testimonial-author">— Kester Macalanda</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I ordered a box for my friend's birthday and it was a huge hit! Everyone loved the cookies."</p>
+        <p class="testimonial-author">— Josh Huidem</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I ordered a box for a familiy celebration and Everyone loved the cookies!! will order again."</p>
+        <p class="testimonial-author">— Ava Pacleb</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  <!-- ================= call to action section ================= -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Taste the Magic?</h2>
+        <p>Order now and experience the deliciousness of Dough LEYcious!</p>
+        <a href="menu.php" class="cta-btn">Shop Now</a>
+      </div>
+    </div>
+  </section>
+
+<!-- ================= footer section ================= -->
+<button id="backToTop" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
+  <i class="fas fa-cookie-bite"></i>
+</button>
+
+<footer class="footer">
+
+  <div class="footer-content">
+
+    <div class="footer-section">
+      <h3>Find Us</h3>
+      <div class="socials">
+        <a href="https://www.facebook.com/profile.php?id=61567054065532" 
+           aria-label="Visit our Facebook page">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://www.instagram.com/dough_leycious/" 
+           aria-label="Visit our Instagram page">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="index.php">Home</a>
+      <a href="menu.php">Menu</a>
+      <a href="aboutus.php">About Us</a>
+      <a href="terms.php">Terms and Conditions</a>
+    </div>
+
+    
+  <div class="footer-section">
+    <h3>Contact</h3>
+    <p>📧 <a href="mailto:k.munsayac1109@gmail.com">k.munsayac1109@gmail.com</a></p>
+    <p>📍 Available for delivery</p>
+    <a href="contact.php" class="contact-page-link">💬 Send us a message</a>
+</div>
+
+  </div>
+
+  <hr class="footer-divider">
+
+  <div class="footer-bottom">
+    <p>&copy; 2024 <span>Dough LEYcious</span>. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+

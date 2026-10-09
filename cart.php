@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dough LEYcious - Review your cart and checkout!">
+  <title>Your Cart - DoughLEYcious</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- for font only -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.php" class="nav-logo">
+  <img src="images/logo.png" alt="Dough LEYcious Logo" class="nav-logo-img">
+</a>
+    
+    <button class="nav-toggle-btn" type="button" aria-label="Open menu" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.php">Home</a></li>
+      <li><a href="menu.php">Menu</a></li>
+      <li><a href="aboutus.php">About Us</a></li>
+      <li><a href="contact.php">Contact</a></li>
+      <li><a href="cart.php" class="active">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="main-content">
+
+
+  <!-- ================= cart banner ================= -->
+  <div class="cart-banner">
+    <div class="cart-banner-text">
+      <h1>Your Cart 🛒</h1>
+      <p>Review your order before checking out!</p>
+    </div>
+  </div>
+
+  <!-- ================= cart section ================= -->
+  <section class="cart-section">
+    <div class="container">
+
+      <div class="cart-wrapper">
+
+        <!-- ================= cart items ================= -->
+        <div class="cart-left">
+          <div class="cart-header">
+            <h2>Order Summary</h2>
+            <button class="clear-cart-btn" onclick="clearCart()">
+              🗑️ Clear Cart
+            </button>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- here mag load mga items -->
+          <div id="cart-items">
+
+            <!-- empty cart message -->
+            <div class="empty-cart" id="empty-cart">
+              <div class="empty-cart-icon">🛒</div>
+              <h3>Your cart is empty!</h3>
+              <p>Looks like you haven't added any cookies yet.</p>
+              <button class="hero-btn" 
+                      onclick="location.href='menu.php'">
+                🍪 Start Shopping
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= order details ================= -->
+        <div class="cart-right">
+          <div class="cart-summary-box">
+              <h2>Order Details</h2>
+                <div class="divider"></div>
+
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="subtotal-price">₱0</span>
+            </div>
+
+            <div class="summary-row">
+              <span>Delivery Fee</span>
+              <span id="delivery-fee">₱50</span>
+            </div>
+
+            <div class="summary-row discount-row" id="discount-row"
+                 style="display:none;">
+              <span>Discount</span>
+              <span id="discount-amount" class="discount-text">-₱0</span>
+            </div>
+
+            <hr class="summary-divider">
+
+            <div class="summary-row total-row">
+              <span>Total</span>
+              <span id="total-price">₱0</span>
+            </div>
+
+            <!-- checkout button -->
+            <button class="checkout-btn" onclick="checkout()">
+              ✅ Checkout
+            </button>
+
+            <!-- continue shopping button -->
+            <button class="continue-btn" 
+                    onclick="location.href='menu.php'">
+              🍪 Continue Shopping
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= you might also like section(below cart) ================= -->
+  <section class="also-like-section">
+    <div class="container">
+      <h2 class="section-title">Our Other Products 🍪</h2>
+        <div class="divider"></div>
+          <div class="also-like-grid">
+
+        <div class="also-like-card">
+          <img src="images/chocolate cake cookie.jpg" 
+               alt="Chocolate Cake Cookie" 
+               loading="lazy">
+          <h3>Chocolate Cake</h3>
+          <p class="price">₱219</p>
+          <button class="also-like-btn" 
+                  onclick="quickAddToCart('Chocolate Cake', 219, 'images/chocolate cake cookie.jpg')">
+            Add to Cart 🛒
+          </button>
+        </div>
+
+        <div class="also-like-card">
+          <img src="images/chocolate chip cake.jpg" 
+               alt="Chocolate Chip Cake" 
+               loading="lazy">
+          <h3>Chocolate Chip Cake</h3>
+          <p class="price">₱200</p>
+          <button class="also-like-btn" 
+                  onclick="quickAddToCart('Chocolate Chip Cake', 200, 'images/chocolate chip cake.jpg')">
+            Add to Cart 🛒
+          </button>
+        </div>
+
+        <div class="also-like-card">
+          <img src="images/cheese bread.jpg" 
+               alt="Cheese Bread" 
+               loading="lazy">
+          <h3>Flat Bread</h3>
+          <p class="price">₱99</p>
+          <button class="also-like-btn" 
+                  onclick="quickAddToCart('Flat Bread', 99, 'images/cheese bread.jpg')">
+            Add to Cart 🛒
+          </button>
+        </div>
+
+        <div class="also-like-card">
+          <img src="images/dark chocolate cookie.jpg" 
+               alt="Dark Chocolate Cookie" 
+               loading="lazy">
+          <h3>Crinkles</h3>
+          <p class="price">₱119</p>
+          <button class="also-like-btn" 
+                  onclick="quickAddToCart('Crinkles', 119, 'images/dark chocolate cookie.jpg')">
+            Add to Cart 🛒
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= footer section ================= -->
+<button id="backToTop" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
+  <i class="fas fa-cookie-bite"></i>
+</button>
+
+<footer class="footer">
+
+  <div class="footer-content">
+
+    <div class="footer-section">
+      <h3>Find Us</h3>
+      <div class="socials">
+        <a href="https://www.facebook.com/profile.php?id=61567054065532"
+           aria-label="Visit our Facebook page">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://www.instagram.com/dough_leycious/"
+           aria-label="Visit our Instagram page">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="index.php">Home</a>
+      <a href="menu.php">Menu</a>
+      <a href="aboutus.php">About Us</a>
+      <a href="terms.php">Terms and Conditions</a>
+    </div>
+
+    <div class="footer-section">
+      <h3>Contact</h3>
+      <p>📧 <a href="mailto:k.munsayac1109@gmail.com">k.munsayac1109@gmail.com</a></p>
+      <p>📍 Available for delivery</p>
+      <a href="contact.php" class="contact-page-link">💬 Send us a message</a>
+    </div>
+
+  </div>
+
+  <hr class="footer-divider">
+
+  <div class="footer-bottom">
+    <p>&copy; 2024 <span>Dough LEYcious</span>. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Dough LEYcious - Send us a message!">
+  <title>Dough LEYcious - Contact Us</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+
+<body>
+
+<!-- ================= navigation bar ================= -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.php" class="nav-logo">
+  <img src="images/logo.png" alt="Dough LEYcious Logo" class="nav-logo-img">
+</a>
+  
+    <button class="nav-toggle-btn" type="button" aria-label="Open menu" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.php">Home</a></li>
+      <li><a href="menu.php">Menu</a></li>
+      <li><a href="aboutus.php">About Us</a></li>
+      <li><a href="contact.php" class="active">Contact</a></li>
+      <li><a href="cart.php">🛒 Cart 
+        (<span id="cart-count">0</span>)</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main class="main-content">
+
+  <!-- ================= contact banner ================= -->
+  <div class="contact-banner">
+    <div class="contact-banner-text">
+      <h1>Contact Us</h1>
+      <p>We'd love to hear from you! 💛</p>
+    </div>
+  </div>
+
+  <!-- ================= contact section ================= -->
+  <section class="contact-section">
+    <div class="contact-center">
+
+      <h2>Get In Touch</h2>
+      <div class="divider"></div>
+      <p class="contact-intro">
+        Have a question, custom order request, or just want to say hi?
+        Reach out to us through any of the options below! 🍪
+      </p>
+
+      <!-- information cards grid -->
+      <div class="info-cards-grid">
+
+        <!-- email card -->
+        <div class="info-card">
+          <div class="info-icon">📧</div>
+          <div class="info-text">
+            <h4>Email Us</h4>
+            <a href="mailto:k.munsayac1109@gmail.com">
+              k.munsayac1109@gmail.com
+            </a>
+          </div>
+        </div>
+
+        <!-- delivery card -->
+        <div class="info-card">
+          <div class="info-icon">📍</div>
+          <div class="info-text">
+            <h4>Delivery</h4>
+            <p>Available for delivery in your area</p>
+          </div>
+        </div>
+
+        <!-- for response time card -->
+        <div class="info-card">
+          <div class="info-icon">⏰</div>
+          <div class="info-text">
+            <h4>Response Time</h4>
+            <p>We reply within 24 hours</p>
+          </div>
+        </div>
+
+        <!-- scoial medias -->
+        <div class="info-card">
+          <div class="info-icon">📱</div>
+          <div class="info-text">
+            <h4>Follow Us</h4>
+            <div class="contact-socials">
+              <a href="https://www.facebook.com/profile.php?id=61567054065532"
+                 aria-label="Facebook" target="_blank">
+                <i class="fab fa-facebook"></i> Facebook
+              </a>
+              <a href="https://www.instagram.com/dough_leycious/"
+                 aria-label="Instagram" target="_blank">
+                <i class="fab fa-instagram"></i> Instagram
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- cta buttons -->
+      <div class="contact-cta">
+        <a href="mailto:k.munsayac1109@gmail.com" class="hero-btn">
+          📧 Email Us Now
+        </a>
+        <a href="menu.php" class="hero-btn-outline">
+          🍪 View Our Menu
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= footer section ================= -->
+<button id="backToTop" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
+  <i class="fas fa-cookie-bite"></i>
+</button>
+
+<footer class="footer">
+
+  <div class="footer-content">
+
+    <div class="footer-section">
+      <h3>Find Us</h3>
+      <div class="socials">
+        <a href="https://www.facebook.com/profile.php?id=61567054065532"
+           aria-label="Visit our Facebook page" target="_blank">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://www.instagram.com/dough_leycious/"
+           aria-label="Visit our Instagram page" target="_blank">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="index.php">Home</a>
+      <a href="menu.php">Menu</a>
+      <a href="aboutus.php">About Us</a>
+      <a href="contact.php">Contact</a>
+      <a href="terms.php">Terms and Conditions</a>
+    </div>
+
+    <div class="footer-section">
+      <h3>Contact</h3>
+      <p>📧 <a href="mailto:k.munsayac1109@gmail.com">
+        k.munsayac1109@gmail.com</a>
+      </p>
+      <p>📍 Available for delivery</p>
+      <a href="contact.php" class="contact-page-link">
+        💬 Send us a message
+      </a>
+    </div>
+
+  </div>
+
+  <hr class="footer-divider">
+
+  <div class="footer-bottom">
+    <p>&copy; 2024 <span>Dough LEYcious</span>. All rights reserved .</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dough LEYcious - Freshly baked cookies made with love. Order now!">
+  <title>Dough Leycious - Home</title>
+
+  <!-- link sa css -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- for icons/emojis -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- for font only -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+<body>
+
+<!-- ================= for navigation bar ================= -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.php" class="nav-logo">
+      <img src="images/logo.png" alt="Dough LEYcious Logo" class="nav-logo-img">
+    </a>
+    <button class="nav-toggle-btn" type="button" aria-label="Open menu" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.php">Home</a></li>
+      <li><a href="menu.php">Menu</a></li>
+      <li><a href="aboutus.php">About Us</a></li>
+      <li><a href="contact.php">Contact</a></li>
+      <li><a href="cart.php">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="main-content">
+
+    <header class="header">
+   <img src="images/header3.png" alt="Assortment of freshly baked cookies including chocolate chip and oatmeal varieties, displayed on a rustic wooden table in a warm, inviting bakery kitchen, radiating comfort and indulgence">
+    <div class="header-overlay">
+      <h1>Our Cookie Menu 🍪</h1>
+      <p>Hover to spin, click to discover what's inside!</p>
+    </div>
+  </header>
+
+<!-- ================= Menu Hero ================= -->
+<section class="menu-welcome">
+    <div class="container">
+      <h2>Explore Our Cookies</h2>
+      <p>Freshly baked, made with the finest ingredients 💛</p>
+      <div class="menu-actions">
+        <a href="cart.php" class="menu-btn-outline">
+          <i class="fas fa-shopping-cart"></i> View Cart
+        </a>
+      </div>
+    </div>
+  </section>
+
+<!-- ================= Menu Sections ================= -->
+  <div class="menu-container">
+
+    <!-- ===== COOKIES ===== -->
+    <h3 class="category-title">🍪 Cookies <span class="menu-count">5 flavors</span></h3>
+
+    <div class="cookie-grid">
+
+      <!-- Cookie 1 -->
+      <div class="cookie-grid-card" onclick="openIngredientModal(this)" 
+        data-name="Classic Chocolate Chip"
+        data-tagline=""
+        data-price="₱55.00"
+        data-img="images/choco chip.jpg"
+        data-description="The timeless favorite everyone loves">
+        <span class="badge best-seller">Best Seller</span>
+        <div class="cookie-img-wrapper">
+          <img src="images/choco chip.jpg" alt="Classic Chocolate Chip Cookie">
+        </div>
+        <h3>Classic Chocolate Chip</h3>
+        <p class="cookie-tagline">The timeless favorite everyone loves</p>
+        <span class="cookie-price">₱55.00</span>
+        <button class="view-ingredients-btn" onclick="event.stopPropagation(); openIngredientModal(this.parentElement)">
+          <i class="fas fa-list-ul"></i> View Cookie
+        </button>
+      </div>
+
+      <!-- Cookie 2 -->
+      <div class="cookie-grid-card" onclick="openIngredientModal(this)"
+        data-name="Oatmeal Chocolate"
+        data-tagline=""
+        data-price="₱69.00"
+        data-img="images/oatmeal choco.jpg"
+            data-description="Rich, fudgy, and intensely chocolatey"
+                    data-allergens="Contains: N/A">
+        <div class="cookie-img-wrapper">
+          <img src="images/oatmeal choco.jpg" alt="Oatmeal Chocolate Cookie">
+        </div>
+        <h3>Oatmeal Chocolate</h3>
+        <p class="cookie-tagline">Rich, fudgy, and intensely chocolatey</p>
+        <span class="cookie-price">₱69.00</span>
+        <button class="view-ingredients-btn" onclick="event.stopPropagation(); openIngredientModal(this.parentElement)">
+          <i class="fas fa-list-ul"></i> View Cookie
+        </button>
+      </div>
+
+      <!-- Cookie 3 -->
+      <div class="cookie-grid-card" onclick="openIngredientModal(this)"
+        data-name="Biscoff"
+        data-tagline=""
+        data-price="₱75.00"
+        data-img="images/biscoff.png"
+            data-description="Caramelized cookie with a hint of cinnamon"
+                    data-allergens="Contains: N/A">
+        <span class="badge new">New</span>
+        <div class="cookie-img-wrapper">
+          <img src="images/biscoff.png" alt="Biscoff Cookie">
+        </div>
+        <h3>Biscoff Choco Chip</h3>
+        <p class="cookie-tagline">Caramelized cookie with a hint of cinnamon</p>
+        <span class="cookie-price">₱75.00</span>
+        <button class="view-ingredients-btn" onclick="event.stopPropagation(); openIngredientModal(this.parentElement)">
+          <i class="fas fa-list-ul"></i> View Cookie
+        </button>
+      </div>
+
+      <!-- Cookie 4 -->
+      <div class="cookie-grid-card" onclick="openIngredientModal(this)"
+        data-name="Oreo"
+        data-tagline=""
+        data-price="₱65.00"
+        data-img="images/oreo.jpg"
+            data-description="Creamy filling between two chocolate wafers"
+                    data-allergens="Contains: N/A">
+                    <span class="badge best-seller">Popular</span>
+        <div class="cookie-img-wrapper">
+          <img src="images/oreo.jpg" alt="Oreo Cookie">
+        </div>
+        <h3>Oreo Crumbl</h3>
+        <p class="cookie-tagline">Creamy filling between two chocolate wafers</p>
+        <span class="cookie-price">₱65.00</span>
+        <button class="view-ingredients-btn" onclick="event.stopPropagation(); openIngredientModal(this.parentElement)">
+          <i class="fas fa-list-ul"></i> View Cookie
+        </button>
+      </div>
+
+      <!-- Cookie 5 -->
+      <div class="cookie-grid-card" onclick="openIngredientModal(this)"
+        data-name="S'mores Cookie"
+        data-tagline=""
+        data-price="₱59.00"
+        data-img="images/smores.jpg"
+            data-description="Graham, chocolate & toasted marshmallow"
+                    data-allergens="Contains: N/A">
+        <div class="cookie-img-wrapper">
+          <img src="images/smores.jpg" alt="S'mores Cookie">
+        </div>
+        <h3>S'mores Cookie</h3>
+        <p class="cookie-tagline">Graham, chocolate & toasted marshmallow</p>
+        <span class="cookie-price">₱59.00</span>
+        <button class="view-ingredients-btn" onclick="event.stopPropagation(); openIngredientModal(this.parentElement)">
+          <i class="fas fa-list-ul"></i> View Cookie
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ===== CAKES ===== -->
+    <h3 class="category-title">🍰 Cakes <span class="menu-count">2 flavors</span></h3>
+
+    <div class="cookie-grid">
+
+      <!-- Cake 1 -->
+      <div class="cookie-grid-card" onclick="openIngredientModal(this)"
+        data-name="Chocolate Cake"
+        data-tagline=""
+        data-price="₱219.00"
+        data-img="images/chocolate cake cookie.jpg"
+                    data-description="Simple chocolate cake good for special dates!"
+                    data-allergens="Contains: N/A">
+        <span class="badge customize">Customize</span>
+        <div class="cookie-img-wrapper">
+          <img src="images/chocolate cake cookie.jpg" alt="Chocolate Cake Cookie">
+        </div>
+        <h3>Chocolate Cake</h3>
+        <p class="cookie-tagline">can customize chocolate cake good for special dates!</p>
+        <span class="cookie-price">₱219.00</span>
+        <button class="view-ingredients-btn" onclick="event.stopPropagation(); openIngredientModal(this.parentElement)">
+          <i class="fas fa-list-ul"></i> View Cookie
+        </button>
+      </div>
+
+      <!-- Cake 2 -->
+      <div class="cookie-grid-card" onclick="openIngredientModal(this)"
+        data-name="Chocolate Chip Cake"
+        data-tagline=""
+        data-price="₱180.00"
+        data-img="images/chocolate chip cake.jpg"
+            data-description="A delightful blend of cake and cookie textures"
+                    data-allergens="Contains: N/A">
+        <div class="cookie-img-wrapper">
+          <img src="images/chocolate chip cake.jpg" alt="Chocolate Chip Cake Cookie">
+        </div>
+        <h3>Chocolate Chip Cake</h3>
+        <p class="cookie-tagline">A delightful blend of cake and cookie textures</p>
+        <span class="cookie-price">₱180.00</span>
+        <button class="view-ingredients-btn" onclick="event.stopPropagation(); openIngredientModal(this.parentElement)">
+          <i class="fas fa-list-ul"></i> View Cookie
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ===== BREAD SECTION ===== -->
+    <h3 class="category-title">🥖 Bread <span class="menu-count">1 flavor</span></h3>
+
+    <div class="cookie-grid">
+
+      <!-- Bread 1 -->
+      <div class="cookie-grid-card" onclick="openIngredientModal(this)"
+        data-name="Cheese Bread"
+        data-tagline=""
+        data-price="₱109.00"
+        data-img="images/cheese bread.jpg"
+            data-description="Flaky, buttery, and filled with creamy cheese"
+                    data-allergens="Contains: N/A">
+        <div class="cookie-img-wrapper">
+          <img src="images/cheese bread.jpg" alt="Cheese Bread">
+        </div>
+        <h3>Flat Bread</h3>
+        <p class="cookie-tagline">Flaky, buttery, and filled with creamy cheese</p>
+        <span class="cookie-price">₱109.00</span>
+        <button class="view-ingredients-btn" onclick="event.stopPropagation(); openIngredientModal(this.parentElement)">
+          <i class="fas fa-list-ul"></i> View Cookie
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ===== CHOCOLATE CRAVINGS ===== -->
+    <h3 class="category-title">🍫 Chocolate Cravings <span class="menu-count">1 flavor</span></h3>
+
+    <div class="cookie-grid">
+
+      <!-- Craving 1 -->
+      <div class="cookie-grid-card" onclick="openIngredientModal(this)"
+        data-name="Dark Chocolate"
+        data-tagline=""
+        data-price="₱119.00"
+        data-img="images/dark chocolate cookie.jpg"
+            data-description="Rich, intense chocolate flavor"
+                    data-allergens="Contains: N/A">
+        <div class="cookie-img-wrapper">
+          <img src="images/dark chocolate cookie.jpg" alt="Dark Chocolate Cookie">
+        </div>
+        <h3>Crinkles</h3>
+        <p class="cookie-tagline">Rich, intense chocolate flavor</p>
+        <span class="cookie-price">₱119.00</span>
+        <button class="view-ingredients-btn" onclick="event.stopPropagation(); openIngredientModal(this.parentElement)">
+          <i class="fas fa-list-ul"></i> View Cookie
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+<!-- ================= MODAL ================= -->
+<div class="ingredient-modal-overlay" id="ingredientModal">
+  <div class="ingredient-modal">
+    <button class="modal-close-btn" onclick="closeIngredientModal()">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <div class="modal-cookie-header">
+      <img src="" alt="" class="modal-cookie-img" id="modalImg">
+      <h2 id="modalName"></h2>
+      <p class="modal-tagline" id="modalTagline"></p>
+      <div class="quantity">
+          <button class="minus">−</button>
+          <input type="number" value="0" min="0">
+          <button class="plus">+</button>
+        </div>
+      <span class="modal-price" id="modalPrice"></span>
+    </div>
+
+    <p class="modal-description" id="modalDescription"></p>
+
+    <ul class="modal-ingredients-list" id="modalIngredients"></ul>
+
+    <div class="modal-allergen" id="modalAllergen">
+      <span id="modalAllergenText"></span>
+    </div>
+
+    <div class="modal-actions">
+      <button class="add-to-cart-btn" onclick="addModalToCart()">
+        <i class="fas fa-cart-plus"></i> Add to Cart 
+      </button>
+      <button class="modal-close-action" onclick="closeIngredientModal()">
+        <i class="fas fa-arrow-left"></i> Back to Menu
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= Footer ================= -->
+<button id="backToTop" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
+  <i class="fas fa-cookie-bite"></i>
+</button>
+
+<footer class="footer footer-menu-page">
+
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Find Us</h3>
+      <div class="socials">
+        <a href="https://www.facebook.com/profile.php?id=61567054065532" aria-label="Visit our Facebook page">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://www.instagram.com/dough_leycious/" aria-label="Visit our Instagram page">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <a href="index.php">Home</a>
+      <a href="menu.php">Menu</a>
+      <a href="aboutus.php">About Us</a>
+      <a href="terms.php">Terms and Conditions</a>
+    </div>
+
+    <div class="footer-section">
+      <h3>Contact</h3>
+      <p>📧 <a href="mailto:k.munsayac1109@gmail.com">k.munsayac1109@gmail.com</a></p>
+      <p>📍 Available for delivery</p>
+      <a href="contact.php" class="contact-page-link">💬 Send us a message</a>
+    </div>
+  </div>
+
+  <hr class="footer-divider">
+
+  <div class="footer-bottom">
+    <p>&copy; 2024 <span>Dough LEYcious</span>. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
