@@ -16,25 +16,24 @@ function updateCartCount() {
 
 
 // ================= carousel (header)=================
-// kinukuha nito yung para sa slideshow sa header, tapos nagse-set ng interval para mag-auto change every 3 seconds.
 let slides = document.querySelectorAll(".slide");
 let current = 0;
-// ginagawa nito active yung first slide pag na load page, para hindi blank agad yung header.
+
 function showSlide(index) {
   slides.forEach((slide) => slide.classList.remove("active"));
   slides[index].classList.add("active");
 }
-// dito naman nag nnext slide siya automatically every 3 seconds.
+
 function nextSlide() {
   current = (current + 1) % slides.length;
   showSlide(current);
 }
-// auto change header every 3 seconds
+
 setInterval(nextSlide, 3000);
 
 // ================= Open ingredient modal (for menu) =================
 let selectedModalCard = null;
-// para naman mag open yung modal pag click yung ingredient(cookie) card sa menu, tapos nilalagay niya yung details ng item sa modal based on data attributes ng card.
+
 function openIngredientModal(card) {
   const modal = document.getElementById("ingredientModal");
   if (!modal) return;
@@ -81,7 +80,6 @@ function closeIngredientModal() {
 }
 
 // ================= Modal quantity and add to cart =================
-// ito naman yung function na nag aadd ng item sa cart pag nasa modal tapos click yung add to cart button, binabasa niya yung quantity input sa modal.
 function addModalToCart() {
   const modal = document.getElementById("ingredientModal");
   if (!modal) return;
@@ -126,12 +124,10 @@ function addModalToCart() {
   updateCartCount();
 
 
-  // If currently on cart page (rare), refresh UI
   if (document.getElementById("cart-items")) {
     displayCart();
   }
 
-  // Reset modal quantity input back to 0 after adding
   if (qtyInput) qtyInput.value = 0;
 
   showToast(`Added to cart: ${name}`, { type: "success" });
@@ -151,7 +147,6 @@ function showToast(message, options = {}) {
 
   const isSuccess = options?.type === "success";
 
-  // Reset classes each time
   toast.classList.remove("toast-success");
   toast.classList.add("toast");
 
@@ -171,7 +166,6 @@ function showToast(message, options = {}) {
 
 
 // ================= confirmation toast =================
-// ito yung custom confirmation toast na lumalabas pag click yung clear cart button, para ma-confirm ng user if sure siya mag clear ng cart
 function showConfirmToast(message, onConfirm) {
   const existing = document.getElementById("confirm-toast");
   if (existing) existing.remove();
@@ -193,7 +187,6 @@ function showConfirmToast(message, onConfirm) {
 
   document.body.appendChild(overlay);
 
-  // -------------------- force reflow then add active class for animation ------------------
   requestAnimationFrame(() => {
     overlay.classList.add("active");
   });
@@ -217,17 +210,15 @@ function showConfirmToast(message, onConfirm) {
   });
 }
 
-// ================= quick add to cart (for recommendation cards) =================
-// ginagawa nito quick add to cart functionality para sa mga recommendation cards sa cart page, para mabilis mag add ng item sa cart without opening modal
+// ================= quick add to cart =================
 function quickAddToCart(name, price, imgSrc) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let existing = cart.find((item) => item.name === name);
 
-  // Enforce box limits for quick add buttons too
   const maxQty = getMaxQtyForOrderType();
   if (maxQty !== Infinity) {
     const currentQty = getCartTotalQty();
-    const extraQty = 1; // quick add always +1
+    const extraQty = 1;
     if (currentQty + extraQty > maxQty) {
       showBoxLimitToast();
       showToast(`Cannot add more than ${maxQty} cookies for this box.`);
@@ -244,15 +235,12 @@ function quickAddToCart(name, price, imgSrc) {
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartCount();
 
-  // If on cart page, refresh UI
   if (document.getElementById("cart-items")) {
     displayCart();
   }
 
-  // Keep your icons in toast ✅
   showToast(`Added to cart: ${name}`, { type: "success" });
 
-  // -------------------- smooth scroll to cart section so user sees the update --------------------
   const cartSection = document.querySelector(".cart-section");
   if (cartSection) {
     cartSection.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -260,7 +248,6 @@ function quickAddToCart(name, price, imgSrc) {
 }
 
 // ================= order page =================
-//dito naman yung function na nag se-set ng order type (box of 6, 8, 12, or per piece) sa localStorage pag sa order page click yung button
 function selectOrder(type) {
   localStorage.setItem("orderType", type);
 
@@ -279,7 +266,6 @@ function selectOrder(type) {
 }
 
 // ================= ORDER LIMITS =================
-// ginagawa nito yung logic para i-enforce yung maximum quantity ng items sa cart based on order type
 function getMaxQtyForOrderType() {
   const orderType = localStorage.getItem("orderType") || "";
 
@@ -287,15 +273,14 @@ function getMaxQtyForOrderType() {
   if (orderType === "8pcs") return 8;
   if (orderType === "12pcs") return 12;
 
-  // pag per piece unlimited
   return Infinity;
 }
-// ito naman binibilang yung toal ng mga nakalagay sa cart
+
 function getCartTotalQty() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   return cart.reduce((sum, item) => sum + (item.qty || 0), 0);
 }
-// dito naman makikita pag puwede pa mag add ng item sa cart base sa current max limit ng order type
+
 function canAddQty(extraQty) {
   const maxQty = getMaxQtyForOrderType();
   if (maxQty === Infinity) return true;
@@ -303,7 +288,7 @@ function canAddQty(extraQty) {
   const currentQty = getCartTotalQty();
   return currentQty + extraQty <= maxQty;
 }
-// nagbibigay lang to ng warning pag na reach na yung limit ng box
+
 function showBoxLimitToast() {
   const orderType = localStorage.getItem("orderType") || "";
   const limits = {
@@ -331,17 +316,14 @@ function goToOrderPage() {
 const deliveryRates = {
   ncr: { base: 50, minOrder: 300 },
 };
-// function naman nito ay dinidisplay niya yung mga item na nasa cart 
+
 function displayCart() {
   const cartContainer = document.getElementById("cart-items");
   const subtotalDisplay = document.getElementById("subtotal-price");
   const totalDisplay = document.getElementById("total-price");
 
-  // The form page has more advanced delivery fee logic based on address
   const deliveryFee = 50;
 
-
-  // -------------------- gumagana lang sa cart page --------------------
   if (!cartContainer) return;
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -365,7 +347,7 @@ function displayCart() {
     updateCartCount();
     return;
   }
-// dito naman cinocompute niya yung total ng mga price sa cart then nag input ng deliv fee
+
   let subtotal = 0;
   cartContainer.innerHTML = "";
 
@@ -405,7 +387,6 @@ function displayCart() {
 }
 
 // ================= INCREASE QTY =================
-// dito chinecheck niya yung limit bawat dagdag and nirerefresh yung na sa  cart
 function increaseQty(index) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -422,14 +403,11 @@ function increaseQty(index) {
 }
 
 // ================= DECREASE QTY =================
-// dito naman nagbabawas lang siya ng item
 function decreaseQty(index) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (cart[index].qty > 1) {
     cart[index].qty -= 1;
-    
-    // -------------------- mawawala yung item pag nag reach ng 0 --------------------
   } else {
     cart.splice(index, 1);
     showToast("Item removed from cart!");
@@ -452,7 +430,6 @@ function removeItem(index) {
 }
 
 // ================= for clear cart =================
-// dito nagpapakita siya ng confirmation notif and then nirereload niya yung page after confirming if yes
 function clearCart() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -481,12 +458,10 @@ function checkout() {
     return;
   }
 
-  // -------------------- redirect to form page - cart data stays in localStorage --------------------
-  window.location.href = "form.php";
+  window.location.href = "form.php"; // or checkout.php depending on your filename
 }
 
 // ================= CHECKOUT PAGE FUNCTIONS  =================
-// dito naman pinapakita yung ordered items, prices, and total 
 function displayCheckoutItems() {
   const checkoutContainer = document.getElementById("checkout-items");
   const orderTotals = document.getElementById("order-totals");
@@ -497,7 +472,6 @@ function displayCheckoutItems() {
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // ------------ empty cart ------------
   if (cart.length === 0) {
     if (emptyMsg) emptyMsg.style.display = "block";
     if (orderTotals) orderTotals.style.display = "none";
@@ -509,7 +483,6 @@ function displayCheckoutItems() {
   if (orderTotals) orderTotals.style.display = "block";
   if (proceedBtn) proceedBtn.disabled = false;
 
-  // ------------ calculate subtotal ------------
   let subtotal = 0;
   let orderType = localStorage.getItem("orderType") || "";
   let itemsHTML = "";
@@ -566,7 +539,6 @@ if (orderType) {
 
 // ================= OPEN CHECKOUT MODAL  =================
 function openCheckoutModal() {
-  // Require Terms & Conditions agreement (per session) before opening checkout form
   const alreadyAgreed = sessionStorage.getItem("termsAgreed") === "true";
   if (!alreadyAgreed) {
     openTermsModal();
@@ -580,7 +552,6 @@ function openCheckoutModal() {
     return;
   }
 
-  // --------------------- fill modal order summary ---------------------
   let subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   let deliveryFee = 50;
   let total = subtotal + deliveryFee;
@@ -637,13 +608,11 @@ function openCheckoutModal() {
     dateInput.setAttribute("min", today);
   }
 
-  // ================= DELIVERY FEE =================
   const deliveryLocationEl = document.getElementById("delivery-location");
   const deliveryEl = document.getElementById("delivery-fee");
   const orderTotalEl = document.getElementById("order-total");
   const checkoutAddressEl = document.getElementById("checkout-address");
 
-  // compute initial values
   const cartForFee = JSON.parse(localStorage.getItem("cart")) || [];
   const baseSubtotal = cartForFee.reduce((sum, item) => sum + item.price * item.qty, 0);
 
@@ -652,7 +621,6 @@ function openCheckoutModal() {
     return address.includes("marikina");
   };
 
-  // Use same delivery rates as cart page (fallback to ₱50 if missing)
   const resolvedDeliveryFeeFromLocation = (locationValue) => {
     const location = String(locationValue || "ncr").toLowerCase();
     const rates = {
@@ -661,7 +629,6 @@ function openCheckoutModal() {
 
     const chosen = rates[location] || rates.ncr;
     
-    // free delivery rules (by min order)
     if (baseSubtotal >= chosen.minOrder) return 0;
     return chosen.base;
   };
@@ -676,8 +643,6 @@ function openCheckoutModal() {
   };
 
   const refreshDeliveryFee = () => {
-
-    // If nag enter user na taga Marikina sa address, delivery fee is FREE.
     if (addressContainsMarikina()) {
       updateTotals(0);
       return;
@@ -689,14 +654,11 @@ function openCheckoutModal() {
       return;
     }
 
-    // fallback to fixed base fee (current behavior)
     updateTotals(50);
   };
 
-  // initial fee calculation on modal open
   refreshDeliveryFee();
 
-  // for changes in delivery location or address input
   if (deliveryLocationEl) {
     deliveryLocationEl.addEventListener("change", refreshDeliveryFee);
   }
@@ -705,7 +667,6 @@ function openCheckoutModal() {
     checkoutAddressEl.addEventListener("change", refreshDeliveryFee);
   }
 
-  // ===================== show modal =====================
   const modal = document.getElementById("checkout-modal");
 
   if (modal) {
@@ -724,7 +685,6 @@ function closeCheckoutModal() {
 }
 
 // ================= TERMS MODAL =================
-//ito naman yung pop up na modal pag mag check out and meron siyang checkbox to confirm 
 function openTermsModal() {
   const modal = document.getElementById("terms-modal");
   if (!modal) return;
@@ -749,12 +709,9 @@ function closeTermsModal() {
 }
 
 function agreeAndProceed() {
-
-  // terms and conditions agreement (one time lang to per session)
   sessionStorage.setItem("termsAgreed", "true");
 
   const checkbox = document.getElementById("terms-agree-checkbox");
-
   const errorEl = document.getElementById("terms-error");
 
   if (!checkbox) return;
@@ -766,14 +723,11 @@ function agreeAndProceed() {
   }
 
   closeTermsModal();
-  // After agreement, open the checkout modal normally
   openCheckoutModal();
-
 }
 
 // ================= close success modal =================
 function closeSuccessModal() {
-
   const modal = document.getElementById("success-modal");
   if (modal) {
     modal.classList.remove("active");
@@ -792,13 +746,10 @@ function showFileName(input) {
 
 // ================= INPUT VALIDATION =================
 function validateName(name) {
-  // Letters + spaces only (no special characters)
   const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
   return nameRegex.test(name);
 }
 
-
-// ------------- validate phone - exactly 11 digits, no letters ------------------
 function validatePhone(phone) {
   const phoneClean = phone.replace(/[\s\-]/g, "");
   const phoneRegex = /^\d{11}$/;
@@ -809,41 +760,23 @@ function containsNumbers(str) {
   return /\d/.test(str);
 }
 
-// -------------- check if string contains letters --------------------
 function containsLetters(str) {
   return /[A-Za-z]/.test(str);
 }
 
 // ================= submit order =================
 function submitOrder(event) {
-  event.preventDefault();
-
+  // DO NOT prevent default at the start. We will only prevent it if validation fails.
+  
   const name = document.getElementById("checkout-name").value.trim();
   const phone = document.getElementById("checkout-phone").value.trim();
   const address = document.getElementById("checkout-address").value.trim();
 
-  // ================= puwede lang delivery locs between ncr =================
   const ncrKeywords = [
-    "ncr",
-      "metro manila",
-        "manila",
-          "quezon city",
-        "makati",
-          "pasig",
-        "taguig",
-          "muntinlupa",
-      "paranaque",
-        "las piñas",
-      "las pinas",
-        "valenzuela",
-          "malabon",
-      "navotas",
-        "caloocan",
-      "marikina",
-        "pasay",
-      "pateros",
-    "antipolo",
-    "angono",
+    "ncr", "metro manila", "manila", "quezon city", "makati", "pasig",
+    "taguig", "muntinlupa", "paranaque", "las piñas", "las pinas",
+    "valenzuela", "malabon", "navotas", "caloocan", "marikina",
+    "pasay", "pateros", "antipolo", "angono",
   ];
 
   const isNcr = (() => {
@@ -852,6 +785,7 @@ function submitOrder(event) {
   })();
 
   if (!isNcr) {
+    event.preventDefault(); // Stop form submission
     showToast("❌ Delivery is available within NCR only. Please enter an NCR address.");
     document.getElementById("checkout-address").focus();
     return;
@@ -859,32 +793,31 @@ function submitOrder(event) {
 
   const date = document.getElementById("checkout-date").value;
   const time = document.getElementById("checkout-time").value;
-
   const proof = document.getElementById("checkout-proof").files[0];
-  const notes = document.getElementById("checkout-notes")
-    ? document.getElementById("checkout-notes").value.trim()
-    : "";
+  const notes = document.getElementById("checkout-notes") ? document.getElementById("checkout-notes").value.trim() : "";
 
-     // -------------------- validate all required fields ------------------
   if (!name || !phone || !address || !date || !time || !proof) {
+    event.preventDefault(); // Stop form submission
     showToast("⚠️ Please fill in all required fields!");
     return;
   }
 
   if (containsNumbers(name)) {
+    event.preventDefault();
     showToast("⚠️ Name should contain letters only, no numbers!");
     document.getElementById("checkout-name").focus();
     return;
   }
 
   if (!validateName(name)) {
+    event.preventDefault();
     showToast("⚠️ Please enter a valid name (letters only)!");
     document.getElementById("checkout-name").focus();
     return;
   }
 
-   // ------------- validate phone - no letters, exactly 11 digits ------------------
   if (containsLetters(phone)) {
+    event.preventDefault();
     showToast("⚠️ Phone number should contain numbers only!");
     document.getElementById("checkout-phone").focus();
     return;
@@ -893,142 +826,36 @@ function submitOrder(event) {
   const phoneClean = phone.replace(/\D/g, "");
 
   if (phoneClean.length !== 11) {
-    showToast(
-      `⚠️ Phone number must be exactly 11 digits! (currently ${phoneClean.length})`
-    );
+    event.preventDefault();
+    showToast(`⚠️ Phone number must be exactly 11 digits! (currently ${phoneClean.length})`);
     document.getElementById("checkout-phone").focus();
     return;
   }
 
   if (!validatePhone(phone)) {
+    event.preventDefault();
     showToast("⚠️ Please enter a valid 11-digit phone number!");
     document.getElementById("checkout-phone").focus();
     return;
   }
 
-  // get cart for summary
+  // ================= VALIDATION PASSED =================
+  // We do NOT prevent default here. The form will submit to PHP.
+  
+  // Put the cart data into the hidden inputs so PHP can read them
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  let deliveryFee = 50;
+  
+  // Calculate delivery fee
+  let deliveryFee = address.toLowerCase().includes("marikina") ? 0 : 50;
   let total = subtotal + deliveryFee;
 
-  closeCheckoutModal();
+  document.getElementById("hidden-subtotal").value = subtotal;
+  document.getElementById("hidden-delivery-fee").value = deliveryFee;
+  document.getElementById("hidden-total").value = total;
+  document.getElementById("hidden-cart-items").value = JSON.stringify(cart);
 
-   // build success details
-  const successDetails = document.getElementById("success-details");
-  if (successDetails) {
-    let detailsHTML = `
-      <div class="success-info">
-        <p><strong>👤 Name:</strong> ${name}</p>
-        <p><strong>📱 Phone:</strong> ${phone}</p>
-        <p><strong>📍 Address:</strong> ${address}</p>
-        <p><strong>📅 Delivery:</strong> ${date} at ${time}</p>
-        <p><strong>💰 Total:</strong> ₱${total.toFixed(2)}</p>
-        ${notes ? `<p><strong>📝 Notes:</strong> ${notes}</p>` : ""}
-      </div>
-      <div class="success-items">
-        <h4>Items Ordered:</h4>
-    `;
-
-    cart.forEach((item) => {
-      detailsHTML += `
-        <p>${item.name} × ${item.qty} — ₱${(item.price * item.qty).toFixed(2)}</p>
-      `;
-    });
-
-    detailsHTML += `</div>`;
-    successDetails.innerHTML = detailsHTML;
-  }
-
-  // show success modal
-  const successModal = document.getElementById("success-modal");
-  if (successModal) {
-    successModal.classList.add("active");
-    document.body.style.overflow = "hidden";
-  }
-
-  // clear cart after order is placed
-  localStorage.removeItem("cart");
-  updateCartCount();
-
-  // ================= RECEIPT POPULATE =================
-  try {
-    const receiptOrderNoEl = document.getElementById("receipt-order-no");
-    const receiptDateEl = document.getElementById("receipt-date");
-    const receiptNameEl = document.getElementById("receipt-name");
-    const receiptPhoneEl = document.getElementById("receipt-phone");
-    const receiptAddressEl = document.getElementById("receipt-address");
-    const receiptDeliveryDateEl = document.getElementById("receipt-delivery-date");
-    const receiptDeliveryTimeEl = document.getElementById("receipt-delivery-time");
-    const receiptItemsEl = document.getElementById("receipt-items");
-    const receiptSubtotalEl = document.getElementById("receipt-subtotal");
-    const receiptDeliveryFeeEl = document.getElementById("receipt-delivery-fee");
-    const receiptTotalEl = document.getElementById("receipt-total");
-
-    if (
-      receiptOrderNoEl && receiptDateEl && receiptNameEl && receiptPhoneEl &&
-      receiptAddressEl && receiptDeliveryDateEl && receiptDeliveryTimeEl &&
-      receiptItemsEl && receiptSubtotalEl && receiptDeliveryFeeEl && receiptTotalEl
-    ) {
-      const orderNumber = (() => {
-        const existing = sessionStorage.getItem("lastOrderNumber");
-        const now = new Date();
-        const yyyy = now.getFullYear();
-        const mm = String(now.getMonth() + 1).padStart(2, "0");
-        const dd = String(now.getDate()).padStart(2, "0");
-        const hh = String(now.getHours()).padStart(2, "0");
-        const min = String(now.getMinutes()).padStart(2, "0");
-        const rand = Math.floor(Math.random() * 9000) + 1000;
-        const candidate = `DL-${yyyy}${mm}${dd}-${hh}${min}-${rand}`;
-        sessionStorage.setItem("lastOrderNumber", candidate);
-        return existing || candidate;
-      })();
-
-      const nowStr = new Date().toLocaleString();
-
-      // totals
-      receiptOrderNoEl.textContent = orderNumber;
-      receiptDateEl.textContent = nowStr;
-      receiptNameEl.textContent = name;
-      receiptPhoneEl.textContent = phone;
-      receiptAddressEl.textContent = address;
-      receiptDeliveryDateEl.textContent = date;
-      receiptDeliveryTimeEl.textContent = time;
-
-      // notes (optional)
-      const receiptNotesSectionEl = document.getElementById("receipt-notes-section");
-      const receiptNotesEl = document.getElementById("receipt-notes");
-      if (receiptNotesSectionEl && receiptNotesEl) {
-        if (notes) {
-          receiptNotesSectionEl.style.display = "block";
-          receiptNotesEl.textContent = notes;
-        } else {
-          receiptNotesSectionEl.style.display = "none";
-          receiptNotesEl.textContent = "";
-        }
-      }
-
-      receiptItemsEl.innerHTML = cart
-
-        .map((item) => {
-          const lineTotal = item.price * item.qty;
-          return `<div class="receipt-item">
-            <span class="receipt-item-name">${item.name} × ${item.qty}</span>
-            <span class="receipt-item-amount">₱${lineTotal.toFixed(2)}</span>
-          </div>`;
-        })
-        .join("");
-
-      receiptSubtotalEl.textContent = `₱${subtotal.toFixed(2)}`;
-      receiptDeliveryFeeEl.textContent = `₱${deliveryFee.toFixed(2)}`;
-      receiptTotalEl.textContent = `₱${total.toFixed(2)}`;
-    }
-  } catch (e) {
-    // don't break checkout if receipt fails
-  }
-
-  showToast("Order placed successfully! 🍪");
-
+  // Let the form submit normally! (The page will refresh)
 }
 
 // ================= receipt printing =================
@@ -1062,7 +889,6 @@ function printReceipt() {
   }
 }
 
-
 // ================= total =================
 function getTotal() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -1087,15 +913,12 @@ function getTotal() {
   });
 })();
 
-  // ================= hamburger menu (slide down) =================
-
-  // Works across all pages that have navbar and doesn't throw errors on pages without it
+  // ================= hamburger menu =================
   document.querySelectorAll(".navbar").forEach((navbar) => {
     const btn = navbar.querySelector(".nav-toggle-btn");
     const links = navbar.querySelector(".nav-links");
     if (!btn || !links) return;
 
-    // start closed
     links.classList.remove("nav-open");
     btn.setAttribute("aria-expanded", "false");
 
@@ -1109,7 +932,6 @@ function getTotal() {
       toggle();
     });
 
-    // close when clicking a menu option
     links.querySelectorAll("a").forEach((a) => {
       a.addEventListener("click", () => {
         links.classList.remove("nav-open");
@@ -1117,7 +939,6 @@ function getTotal() {
       });
     });
 
-    // close when clicking outside
     document.addEventListener("click", (e) => {
       if (!navbar.contains(e.target)) {
         links.classList.remove("nav-open");
@@ -1125,21 +946,18 @@ function getTotal() {
       }
     });
   });
-  // ---- update cart count on every page ----
+  
   updateCartCount();
 
-  // cart page
   if (document.getElementById("cart-items")) {
     displayCart();
   }
 
-  // checkout/form page
   if (document.getElementById("checkout-items")) {
     displayCheckoutItems();
   }
 
-
-  // ================= cookie modal listeners (with null check) =================
+  // ================= cookie modal listeners =================
   const ingredientModal = document.getElementById("ingredientModal");
   if (ingredientModal) {
     ingredientModal.addEventListener("click", function (e) {
@@ -1148,7 +966,6 @@ function getTotal() {
       }
     });
 
-    //modal quantity + / - buttons
     const qtyInput = ingredientModal.querySelector(".quantity input[type='number']");
     const plusBtn = ingredientModal.querySelector(".quantity .plus");
     const minusBtn = ingredientModal.querySelector(".quantity .minus");
@@ -1173,7 +990,6 @@ function getTotal() {
       });
     }
   }
-
 
   // ================= shop page product card listeners =================
   const productCards = document.querySelectorAll(".product-card");
@@ -1221,7 +1037,6 @@ function getTotal() {
 
           const maxQty = getMaxQtyForOrderType();
 
-          // Enforce limit BEFORE committing the add (so user doesn't lose their selected quantity if they exceed the box limit)
           if (maxQty !== Infinity) {
             const currentQty = getCartTotalQty();
             if (currentQty + qty > maxQty) {
@@ -1247,7 +1062,6 @@ function getTotal() {
           input.value = 0;
 
           showToast(`Added to cart: ${name}`, { type: "success" });
-
 
         });
       }
@@ -1285,7 +1099,6 @@ function getTotal() {
   // ================= Full Name block numbers in real-time =================
   const nameInput = document.getElementById("checkout-name");
 
-  // pinipigilan niya yung number keys from being typed and show real-time feedback
   if (nameInput) {
     nameInput.addEventListener("keypress", function (e) {
       if (/\d/.test(e.key)) {
@@ -1310,30 +1123,4 @@ function getTotal() {
         e.preventDefault();
         showToast("⚠️ Phone number should contain numbers only!");
       }
-    });
-
-    // pinipigilan niya yung letter keys na ma-type just in case may user na mag t-type ng letters, may real-time feedback
-    phoneInput.addEventListener("input", function () {
-      if (containsLetters(this.value)) {
-        showToast("⚠️ Phone number should contain numbers only!");
-        this.value = this.value.replace(/[A-Za-z]/g, "");
-      }
-
-      // tinatanggal niya pag or more like di niya binabasa pag may non-digit characters
-      let digitsOnly = this.value.replace(/\D/g, "");
-
-      // limit to 11 digits max (para hindi lumagpas sa 11 digits kahit walang letters)
-      if (digitsOnly.length > 11) {
-        digitsOnly = digitsOnly.substring(0, 11);
-        this.value = digitsOnly;
-        showToast("⚠️ Phone number must be exactly 11 digits!");
-      }
-    });
-    phoneInput.addEventListener("blur", function () {
-      const digitsOnly = this.value.replace(/\D/g, "");
-      if (digitsOnly.length > 0 && digitsOnly.length !== 11) {
-        showToast(`⚠️ Phone number must be exactly 11 digits! (currently ${digitsOnly.length})`
-        );
-      }
-    });
-  }
+   
