@@ -1,3 +1,76 @@
+<?php
+// ================= DATABASE CONNECTION & ORDER PROCESSING =================
+$host = 'localhost';
+$db   = 'doughleycious';
+$user = 'root'; // Default XAMPP user
+$pass = '';     // Default XAMPP password (usually empty)
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
+$order_success = false;
+$order_id = null;
+
+// Handle the form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_order'])) {
+    // 1. Handle File Upload
+    $uploadDir = 'uploads/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true); // Create uploads folder if it doesn't exist
+    }
+    
+    $fileName = time() . '_' . basename($_FILES['proof']['name']);
+    $uploadFile = $uploadDir . $fileName;
+    
+    if (move_uploaded_file($_FILES['proof']['tmp_name'], $uploadFile)) {
+        try {
+            $pdo->beginTransaction();
+
+            // Insert Order
+            $stmt = $pdo->prepare("INSERT INTO orders (full_name, phone, address, delivery_date, delivery_time, proof_of_payment, notes, subtotal, delivery_fee, total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            
+            $stmt->execute([
+                $_POST['name'],
+                $_POST['phone'],
+                $_POST['address'],
+                $_POST['date'],
+                $_POST['time'],
+                $fileName,
+                $_POST['notes'],
+                $_POST['subtotal'], 
+                $_POST['delivery_fee'], 
+                $_POST['total'] 
+            ]);
+
+            $order_id = $pdo->lastInsertId();
+
+            // Insert Order Items (Decoded from JSON hidden input)
+            if(isset($_POST['cart_items_json']) && !empty($_POST['cart_items_json'])) {
+                $cartItems = json_decode($_POST['cart_items_json'], true);
+                if (is_array($cartItems)) {
+                    $stmtItem = $pdo->prepare("INSERT INTO order_items (order_id, product_name, price, quantity) VALUES (?, ?, ?, ?)");
+                    foreach ($cartItems as $item) {
+                        $stmtItem->execute([$order_id, $item['name'], $item['price'], $item['qty']]);
+                    }
+                }
+            }
+
+            $pdo->commit();
+            $order_success = true;
+            
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            echo "<script>alert('Error saving order: " . addslashes($e->getMessage()) . "');</script>";
+        }
+    } else {
+        echo "<script>alert('Failed to upload proof of payment.');</script>";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,12 +115,11 @@
         </div>
     </nav>
 
-    <!-- ================= MAIN CHECKOUT PAGE(pag proceeded to checkout dito ka mapupunta) ================= -->
+    <!-- ================= MAIN CHECKOUT PAGE ================= -->
     <main class="checkout-page">
 
         <!-- page header -->
         <section class="checkout-header">
-            
             <h1>🍪 Checkout</h1>
             <p>Review your order and complete your purchase</p>
         </section>
@@ -56,7 +128,6 @@
         <section class="checkout-content">
             <div class="checkout-grid">
 
-                <!-- lumalabas dito yung summary ng orders -->
                 <div class="order-summary-card">
                     <h2>📋 Order Summary</h2>
                     <div id="checkout-items">
@@ -84,7 +155,6 @@
                     </div>
                 </div>
 
-                <!-- payment info -->
                 <div class="payment-info-card">
                     <h2>💳 Payment Information</h2>
 
@@ -137,7 +207,6 @@
                     <span>I agree to the Terms and Conditions</span>
                 </label>
                 <div class="terms-error" id="terms-error" style="display:none;">
-
                     ⚠️ Please check the box to agree.
                 </div>
 
@@ -148,7 +217,7 @@
         </div>
     </div>
 
-    <!-- ================= CHECKOUT MODAL(para sa fill up form) ================= -->
+    <!-- ================= CHECKOUT MODAL ================= -->
     <div class="modal-overlay" id="checkout-modal">
 
         <div class="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-form-title">
@@ -158,7 +227,6 @@
             <div class="modal-header">
                 <div class="modal-icon">🍪</div>
                 <h2 id="checkout-form-title">Complete Your Order</h2>
-
                 <p>Fill in your delivery details below</p>
             </div>
 
@@ -167,32 +235,39 @@
                 
             </div>
 
-            <!-- checkout form -->
-            <form id="checkout-form" onsubmit="submitOrder(event)">
+            <!-- CHECKOUT FORM (Updated for PHP processing) -->
+            <form id="checkout-form" action="checkout.php" method="POST" enctype="multipart/form-data">
+
+                <!-- HIDDEN FIELDS FOR PHP -->
+                <input type="hidden" name="submit_order" value="1">
+                <input type="hidden" name="subtotal" id="hidden-subtotal" value="0">
+                <input type="hidden" name="delivery_fee" id="hidden-delivery-fee" value="50">
+                <input type="hidden" name="total" id="hidden-total" value="0">
+                <input type="hidden" name="cart_items_json" id="hidden-cart-items">
 
                 <div class="form-group">
                     <label>Full Name <span class="required">*</span></label>
-                    <input type="text" id="checkout-name" placeholder="e.g. Arvic Pelinta" required>
+                    <input type="text" id="checkout-name" name="name" placeholder="e.g. Arvic Pelinta" required>
                 </div>
 
                 <div class="form-group">
                     <label>Phone Number <span class="required">*</span></label>
-                    <input type="tel" id="checkout-phone" placeholder="e.g. 09123456789" required>
+                    <input type="tel" id="checkout-phone" name="phone" placeholder="e.g. 09123456789" required>
                 </div>
 
                 <div class="form-group">
                     <label>Delivery Address <span class="required">*</span></label>
-                    <textarea id="checkout-address" placeholder="Complete address (street, barangay, city)" required></textarea>
+                    <textarea id="checkout-address" name="address" placeholder="Complete address (street, barangay, city)" required></textarea>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>Delivery Date <span class="required">*</span></label>
-                        <input type="date" id="checkout-date" required>
+                        <input type="date" id="checkout-date" name="date" required>
                     </div>
                     <div class="form-group">
                         <label>Delivery Time <span class="required">*</span></label>
-                        <input type="time" id="checkout-time" required>
+                        <input type="time" id="checkout-time" name="time" required>
                     </div>
                 </div>
 
@@ -204,14 +279,14 @@
                             <span class="upload-text">Click to upload screenshot</span>
                             <span class="upload-hint">JPG, PNG or PDF (max 5MB)</span>
                         </label>
-                        <input type="file" id="checkout-proof" accept="image/*,.pdf" required onchange="showFileName(this)">
+                        <input type="file" id="checkout-proof" name="proof" accept="image/*,.pdf" required onchange="showFileName(this)">
                     </div>
                     <div class="file-name" id="file-name-display"></div>
                 </div>
 
                 <div class="form-group">
                     <label>Other Messages (Optional)</label>
-                    <textarea id="checkout-notes" placeholder="Any special requests or notes..."></textarea>
+                    <textarea id="checkout-notes" name="notes" placeholder="Any special requests or notes..."></textarea>
                 </div>
 
                 <button type="submit" class="checkout-submit-btn">
@@ -222,23 +297,21 @@
     </div>
 
     <!-- ================= SUCCESS MODAL ================= -->
-    <div class="modal-overlay" id="success-modal">
+    <div class="modal-overlay" id="success-modal" <?php if($order_success) echo 'style="display:flex;"'; ?>>
         <div class="success-modal">
             <div class="success-icon">✅</div>
             <h2>Order Placed Successfully!</h2>
             <p>Thank you for your order! We'll confirm your order shortly via SMS/call.</p>
             <div class="success-details" id="success-details">
-      
+                <?php if($order_success) echo "<p><strong>Order #:</strong> " . $order_id . "</p>"; ?>
             </div>
 
-            <!-- Receipt trigger button (separate receipt modal) -->
             <div class="success-receipt-actions" style="margin-top: 16px;">
                 <button type="button" class="receipt-action-btn" onclick="openReceiptModal()">
                     👀 View Receipt
                 </button>
                 <hr style="margin: 16px 0;">
             </div>
-
 
             <!-- ================= RECEIPT MODAL ================= -->
             <div class="modal-overlay" id="receipt-modal" aria-hidden="true">
@@ -251,7 +324,6 @@
                         <p>Print or save your receipt.</p>
                     </div>
 
-                    <!-- ================= RECEIPT (PRINTABLE YAN BOI) ================= -->
                     <div class="receipt-container" id="receipt-container" aria-label="Receipt" style="margin-top: 10px;">
                         <div class="receipt-actions">
                             <button type="button" class="receipt-action-btn" onclick="printReceipt()">
@@ -262,21 +334,21 @@
                         <div class="receipt" id="receipt">
                             <div class="receipt-header">
                                 <div class="receipt-title">🎟️ Dough LEYcious Receipt</div>
-                                <div class="receipt-order-no">Order #: <span id="receipt-order-no">—</span></div>
+                                <div class="receipt-order-no">Order #: <span id="receipt-order-no"><?php echo $order_success ? $order_id : '—'; ?></span></div>
                                 <div class="receipt-date">Date: <span id="receipt-date">—</span></div>
                             </div>
 
                             <div class="receipt-section">
                                 <div class="receipt-section-title">Customer</div>
-                                <div class="receipt-line"><span>Name:</span> <span id="receipt-name">—</span></div>
-                                <div class="receipt-line"><span>Phone:</span> <span id="receipt-phone">—</span></div>
-                                <div class="receipt-line"><span>Address:</span> <span id="receipt-address">—</span></div>
+                                <div class="receipt-line"><span>Name:</span> <span id="receipt-name"><?php echo $order_success ? htmlspecialchars($_POST['name']) : '—'; ?></span></div>
+                                <div class="receipt-line"><span>Phone:</span> <span id="receipt-phone"><?php echo $order_success ? htmlspecialchars($_POST['phone']) : '—'; ?></span></div>
+                                <div class="receipt-line"><span>Address:</span> <span id="receipt-address"><?php echo $order_success ? htmlspecialchars($_POST['address']) : '—'; ?></span></div>
                             </div>
 
                             <div class="receipt-section">
                                 <div class="receipt-section-title">Delivery</div>
-                                <div class="receipt-line"><span>Date:</span> <span id="receipt-delivery-date">—</span></div>
-                                <div class="receipt-line"><span>Time:</span> <span id="receipt-delivery-time">—</span></div>
+                                <div class="receipt-line"><span>Date:</span> <span id="receipt-delivery-date"><?php echo $order_success ? htmlspecialchars($_POST['date']) : '—'; ?></span></div>
+                                <div class="receipt-line"><span>Time:</span> <span id="receipt-delivery-time"><?php echo $order_success ? htmlspecialchars($_POST['time']) : '—'; ?></span></div>
                             </div>
 
                             <div class="receipt-section">
@@ -290,9 +362,9 @@
                             </div>
 
                             <div class="receipt-totals">
-                                <div class="receipt-total-row"><span>Subtotal</span> <span id="receipt-subtotal">—</span></div>
-                                <div class="receipt-total-row"><span>Delivery Fee</span> <span id="receipt-delivery-fee">—</span></div>
-                                <div class="receipt-total-row receipt-total-final"><span>Total</span> <span id="receipt-total">—</span></div>
+                                <div class="receipt-total-row"><span>Subtotal</span> <span id="receipt-subtotal">₱<?php echo $order_success ? number_format($_POST['subtotal'], 2) : '—'; ?></span></div>
+                                <div class="receipt-total-row"><span>Delivery Fee</span> <span id="receipt-delivery-fee">₱<?php echo $order_success ? number_format($_POST['delivery_fee'], 2) : '—'; ?></span></div>
+                                <div class="receipt-total-row receipt-total-final"><span>Total</span> <span id="receipt-total">₱<?php echo $order_success ? number_format($_POST['total'], 2) : '—'; ?></span></div>
                             </div>
                         </div>
                     </div>
@@ -347,6 +419,13 @@
         <hr class="footer-divider">
 
         <div class="footer-bottom">
+            <p>&copy; 2025 Dough LEYcious. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
             <p>&copy; 2025 Dough LEYcious. All rights reserved.</p>
         </div>
     </footer>
