@@ -1,151 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dough LEYcious - Order freshly baked cookies online!">
-  <title>Dough Leycious - Terms and Conditions</title>
+<?php
+    $pageTitle = "Terms and Conditions";
+    $pageDescription = "Dough LEYcious - Our policies for a smooth ordering experience.";
+    $activePage = "";
+    include("site_header.php");
+?>
 
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-   <link rel="icon" type="image/png" href="images/logo.png">
-</head>
-
-<body>
-
-<!-- ================= navigation bar ================= -->
-<nav class="navbar">
-  <div class="navbar-inner">
-    <a href="index.php" class="nav-logo">
-  <img src="images/logo.png" alt="Dough LEYcious Logo" class="nav-logo-img">
-</a>
-
-    <button class="nav-toggle-btn" type="button" aria-label="Open menu" aria-expanded="false">
-      <i class="fas fa-bars"></i>
-    </button>
-    <ul class="nav-links">
-      <li><a href="index.php">Home</a></li>
-      <li><a href="menu.php">Menu</a></li>
-      <li><a href="aboutus.php">About Us</a></li>
-      <li><a href="contact.php">Contact</a></li>
-      <li><a href="cart.php">🛒 Cart (<span id="cart-count">0</span>)</a></li>
-    </ul>
-  </div>
-</nav>
-
-<!-- ================= shop banner/header ================= -->
-<div class="shop-banner">
-  <div class="shop-banner-text">
-    <h1>🍪 Our Terms and Conditions</h1>
-    <p>Read our policies to ensure a smooth and delightful experience!</p>
-  </div>
-</div>
-
-<main class="main-content">
-  <div class="container">
-    
- <!-- ================= TERMS AND CONDITIONS ONLY ================= -->
- <section class="terms-section">
- <div class="container">
- <div class="terms-content">
-
- <!-- TERMS GRID - 4 PERFECT CARDS -->
- <div class="terms-grid">
-
- <!-- Orders & Payment -->
-    <div class="terms-card">
-      <h3>1. Orders & Payment</h3>
-    <div class="divider"></div>
- <p>All orders placed on this website are subject to availability and confirmation. 
-  <strong>Full payment is required before processing and preparing your cookies.</strong></p>
- </div>
-
- <!-- Delivery -->
-      <div class="terms-card">
-    <h3>2. Delivery</h3>
-      <div class="divider"></div>
- <p>We deliver within <strong>selected areas only</strong>. 
-  Delivery schedules may vary depending on location and order volume. We are not responsible for delays caused by weather, traffic, or other unforeseen events.</p>
- </div>
-
- <!-- Product Quality -->
-      <div class="terms-card">
-    <h3>3. Product Quality</h3>
-    <div class="divider"></div>
- <p>All cookies are <strong>freshly baked and made to order</strong>. 
-  Since products are handmade, slight differences in size, shape, or appearance may occur but <strong>quality is always maintained</strong>.</p>
-      </div>
-
- <!-- Refunds & Cancellations -->
-    <div class="terms-card">
-      <h3>4. Refunds & Cancellations</h3>
-  <div class="divider"></div>
- <p>Orders <strong>cannot be cancelled once preparation has started</strong>. 
-  Refunds are only applicable for wrong items delivered or damaged products, reported within <strong>24 hours of
-receipt</strong>.</p>
-        </div>
-      </div>
-
- <!-- CTA Button -->
- <div style="text-align: center; margin-top: 3rem;">
-            <button class="hero-btn" onclick="location.href='menu.php'">
-          🛒 Continue Shopping
-           </button>
-            </div>
-           </div>
-        </div>
-      </section>
+<main>
+  <header class="page-banner">
+    <div class="container">
+      <span class="eyebrow">Policies</span>
+      <h1>Terms and Conditions</h1>
+      <p>Read our policies to ensure a smooth and delightful experience.</p>
     </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid--terms">
+        <article class="card" data-reveal>
+          <span class="card__index">01</span>
+          <h3>Orders &amp; Payment</h3>
+          <p>All orders placed on this website are subject to availability and confirmation. <strong>Full payment is required before processing and preparing your cookies.</strong></p>
+        </article>
+
+        <article class="card" data-reveal>
+          <span class="card__index">02</span>
+          <h3>Delivery</h3>
+          <p>We deliver within <strong>selected areas only</strong>. Delivery schedules may vary depending on location and order volume. We are not responsible for delays caused by weather, traffic, or other unforeseen events.</p>
+        </article>
+
+        <article class="card" data-reveal>
+          <span class="card__index">03</span>
+          <h3>Product Quality</h3>
+          <p>All cookies are <strong>freshly baked and made to order</strong>. Since products are handmade, slight differences in size, shape, or appearance may occur but <strong>quality is always maintained</strong>.</p>
+        </article>
+
+        <article class="card" data-reveal>
+          <span class="card__index">04</span>
+          <h3>Refunds &amp; Cancellations</h3>
+          <p>Orders <strong>cannot be cancelled once preparation has started</strong>. Refunds are only applicable for wrong items delivered or damaged products, reported within <strong>24 hours of receipt</strong>.</p>
+        </article>
+      </div>
+
+      <div class="actions">
+        <a href="menu.php" class="btn btn--primary">Continue Shopping <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
 </main>
 
-<!-- ================= footer section ================= -->
-<button id="backToTop" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
-<i class="fas fa-cookie-bite"></i>
-</button>
-
-<footer class="footer">
-
-  <div class="footer-content">
-
-    <div class="footer-section">
-      <h3>Find Us</h3>
-      <div class="socials">
-        <a href="https://www.facebook.com/profile.php?id=61567054065532"
-           aria-label="Visit our Facebook page">
-          <i class="fab fa-facebook"></i>
-        </a>
-        <a href="https://www.instagram.com/dough_leycious/"
-           aria-label="Visit our Instagram page">
-          <i class="fab fa-instagram"></i>
-        </a>
-      </div>
-    </div>
-
-    <div class="footer-section">
-      <h3>Quick Links</h3>
-      <a href="index.php">Home</a>
-      <a href="menu.php">Menu</a>
-      <a href="aboutus.php">About Us</a>
-      <a href="terms.php">Terms and Conditions</a>
-    </div>
-
-    <div class="footer-section">
-    <h3>Contact</h3>
-    <p>📧 <a href="mailto:k.munsayac1109@gmail.com">k.munsayac1109@gmail.com</a></p>
-    <p>📍 Available for delivery</p>
-    <a href="contact.php" class="contact-page-link">💬 Send us a message</a>
-</div>
-
-  </div>
-    
-  <hr class="footer-divider">
-  <div class="footer-bottom">
-    <p>&copy; 2024 <span>Dough LEYcious</span>. All rights reserved.</p>
-  </div>
-</footer>
-
-<script src="script.js"> </script>
-
-</body>
-</html>
+<?php include("site_footer.php"); ?>

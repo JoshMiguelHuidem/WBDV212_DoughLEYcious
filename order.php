@@ -1,257 +1,127 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dough LEYcious - Choose your cookie box size and order now!">
-  <title>Choose Your Box - DoughLEYcious</title>
+<?php
+    $pageTitle = "Choose Your Box";
+    $pageDescription = "Dough LEYcious - Choose your cookie box size and order now.";
+    $activePage = "";
+    include("site_header.php");
+?>
 
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <!-- for font only -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- favicon -->
-  <link rel="icon" type="image/png" href="images/logo.png">
-</head>
-
-<body>
-
-<!-- ================= NAVBAR ================= -->
-<nav class="navbar">
-  <div class="navbar-inner">
-    <a href="index.php" class="nav-logo">
-  <img src="images/logo.png" alt="Dough LEYcious Logo" class="nav-logo-img">
-</a>
-    
-    <button class="nav-toggle-btn" type="button" aria-label="Open menu" aria-expanded="false">
-      <i class="fas fa-bars"></i>
-    </button>
-    <ul class="nav-links">
-      <li><a href="index.php">Home</a></li>
-      <li><a href="menu.php">Menu</a></li>
-      <li><a href="aboutus.php">About Us</a></li>
-      <li><a href="contact.php">Contact</a></li>
-      <li><a href="cart.php">🛒 Cart (<span id="cart-count">0</span>)</a></li>
-    </ul>
-  </div>
-</nav>
-
-<main class="main-content">
-
-  <!-- ================= ORDER BANNER ================= -->
-  <div class="order-banner">
-    <div class="order-banner-text">
-      <h1>Choose Your Box 🍪</h1>
-      <p>Pick the perfect box size for you!</p>
-    </div>
-  </div>
-
-  <!-- ================= BOX SELECTION SECTION ================= -->
-  <section class="box-section">
+<main>
+  <header class="page-banner">
     <div class="container">
+      <span class="eyebrow">Step 1</span>
+      <h1>Choose Your Box</h1>
+      <p>Pick the perfect box size for you.</p>
+    </div>
+  </header>
 
-      <h2 class="section-title">Select Your Box Size</h2>
-      <div class="divider"></div>
-      <p class="box-subtitle">
-        All boxes are freshly baked and packed with love 💛
-      </p>
+  <section class="section">
+    <div class="container">
+      <div class="section__head" data-reveal>
+        <h2>Select Your Box Size</h2>
+        <p>All boxes are freshly baked and packed with care.</p>
+      </div>
 
-      <div class="box-grid">
-
-        <!-- BOX OF 6 -->
-        <div class="box-card" onclick="selectOrder('6pcs')">
-          <div class="box-badge">Starter</div>
-          <div class="box-icon">🍪</div>
+      <div class="grid grid--boxes">
+        <article class="card box" onclick="selectOrder('6pcs')" data-reveal>
+          <span class="box__tag">Starter</span>
+          <div class="icon-badge"><i class="fa-solid fa-box-open"></i></div>
           <h3>Box of 6</h3>
-          <p class="box-desc">
-            Perfect for personal treats or 
-            a small gift for someone special.
-          </p>
-          <ul class="box-perks">
-            <li>✅ 6 freshly baked cookies</li>
-            <li>✅ Mix & match flavors</li>
-            <li>✅ Gift-ready packaging</li>
+          <p>Perfect for personal treats or a small gift for someone special.</p>
+          <ul class="box__perks">
+            <li><i class="fa-solid fa-check"></i> 6 freshly baked cookies</li>
+            <li><i class="fa-solid fa-check"></i> Mix and match flavors</li>
+            <li><i class="fa-solid fa-check"></i> Gift-ready packaging</li>
           </ul>
-          <button class="box-btn" onclick="selectOrder('6pcs')">
-            Select Box of 6
-          </button>
-        </div>
+          <button type="button" class="btn btn--ghost btn--block">Select Box of 6</button>
+        </article>
 
-        <!-- BOX OF 8 -->
-        <div class="box-card popular" onclick="selectOrder('8pcs')">
-          <div class="box-badge popular-badge">Most Popular ⭐</div>
-          <div class="box-icon">🍪🍪</div>
+        <article class="card box box--featured" onclick="selectOrder('8pcs')" data-reveal>
+          <span class="box__tag">Most Popular</span>
+          <div class="icon-badge"><i class="fa-solid fa-gift"></i></div>
           <h3>Box of 8</h3>
-          <p class="box-desc">
-            Our most popular choice! 
-            Great for sharing with friends and family.
-          </p>
-          <ul class="box-perks">
-            <li>✅ 8 freshly baked cookies</li>
-            <li>✅ Mix & match flavors</li>
-            <li>✅ Gift-ready packaging</li>
+          <p>Our most popular choice. Great for sharing with friends and family.</p>
+          <ul class="box__perks">
+            <li><i class="fa-solid fa-check"></i> 8 freshly baked cookies</li>
+            <li><i class="fa-solid fa-check"></i> Mix and match flavors</li>
+            <li><i class="fa-solid fa-check"></i> Gift-ready packaging</li>
           </ul>
-          <button class="box-btn popular-btn" onclick="selectOrder('8pcs')">
-            Select Box of 8
-          </button>
-        </div>
+          <button type="button" class="btn btn--soft btn--block">Select Box of 8</button>
+        </article>
 
-        <!-- BOX OF 12 -->
-        <div class="box-card" onclick="selectOrder('12pcs')">
-          <div class="box-badge best-badge">Best Value 💰</div>
-          <div class="box-icon">🍪🍪🍪</div>
+        <article class="card box" onclick="selectOrder('12pcs')" data-reveal>
+          <span class="box__tag">Best Value</span>
+          <div class="icon-badge"><i class="fa-solid fa-boxes-stacked"></i></div>
           <h3>Box of 12</h3>
-          <p class="box-desc">
-            The ultimate cookie experience! 
-            Perfect for parties and celebrations.
-          </p>
-          <ul class="box-perks">
-            <li>✅ 12 freshly baked cookies</li>
-            <li>✅ Mix & match flavors</li>
-            <li>✅ Gift-ready packaging</li>
-            <li>✅ Free greeting card 💌(optional)</li>
+          <p>The ultimate cookie experience. Perfect for parties and celebrations.</p>
+          <ul class="box__perks">
+            <li><i class="fa-solid fa-check"></i> 12 freshly baked cookies</li>
+            <li><i class="fa-solid fa-check"></i> Mix and match flavors</li>
+            <li><i class="fa-solid fa-check"></i> Gift-ready packaging</li>
+            <li><i class="fa-solid fa-check"></i> Free greeting card (optional)</li>
           </ul>
-          <button class="box-btn" onclick="selectOrder('12pcs')">
-            Select Box of 12
-          </button>
-        </div>
+          <button type="button" class="btn btn--ghost btn--block">Select Box of 12</button>
+        </article>
 
-        <!-- PER PIECE -->
-        <div class="box-card" onclick="selectOrder('per piece')">
-          <div class="box-badge">Flexible</div>
-          <div class="box-icon">🍪</div>
+        <article class="card box" onclick="selectOrder('per piece')" data-reveal>
+          <span class="box__tag">Flexible</span>
+          <div class="icon-badge"><i class="fa-solid fa-cookie-bite"></i></div>
           <h3>Per Piece</h3>
-          <p class="box-desc">
-            Order cookies individually. Perfect if you only want a few!
-          </p>
-          <ul class="box-perks">
-            <li>✅ No minimum quantity</li>
-            <li>✅ Choose any flavor</li>
-            <li>✅ Budget-friendly option</li>
+          <p>Order cookies individually. Perfect if you only want a few.</p>
+          <ul class="box__perks">
+            <li><i class="fa-solid fa-check"></i> No minimum quantity</li>
+            <li><i class="fa-solid fa-check"></i> Choose any flavor</li>
+            <li><i class="fa-solid fa-check"></i> Budget-friendly option</li>
           </ul>
-          <button class="box-btn" onclick="selectOrder('per piece')">
-            Select Per Piece
-          </button>
-        </div>
-
+          <button type="button" class="btn btn--ghost btn--block">Select Per Piece</button>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- ================= how it works section or guide for order ================= -->
-  <section class="how-section">
+  <section class="section section--tint">
     <div class="container">
-      <h2 class="section-title">How It Works</h2>
-      <div class="divider"></div>
+      <div class="section__head" data-reveal>
+        <span class="eyebrow">Simple process</span>
+        <h2>How It Works</h2>
+      </div>
 
-      <div class="how-grid">
-
-        <div class="how-card">
-          <div class="how-number">1</div>
-          <div class="how-icon">📦</div>
+      <div class="grid grid--steps">
+        <article class="card step" data-reveal>
+          <span class="step__number">1</span>
+          <div class="icon-badge"><i class="fa-solid fa-box-open"></i></div>
           <h3>Choose Your Box</h3>
-          <p>Pick the box size that's right for you.</p>
-        </div>
-
-        <div class="how-arrow">→</div>
-
-        <div class="how-card">
-          <div class="how-number">2</div>
-          <div class="how-icon">🍪</div>
+          <p>Pick the box size that is right for you.</p>
+        </article>
+        <article class="card step" data-reveal>
+          <span class="step__number">2</span>
+          <div class="icon-badge"><i class="fa-solid fa-cookie-bite"></i></div>
           <h3>Pick Your Cookies</h3>
           <p>Select your favorite cookie flavors.</p>
-        </div>
-
-        <div class="how-arrow">→</div>
-
-        <div class="how-card">
-          <div class="how-number">3</div>
-          <div class="how-icon">🛒</div>
+        </article>
+        <article class="card step" data-reveal>
+          <span class="step__number">3</span>
+          <div class="icon-badge"><i class="fa-solid fa-bag-shopping"></i></div>
           <h3>Add to Cart</h3>
           <p>Review your order and add to cart.</p>
-        </div>
-
-        <div class="how-arrow">→</div>
-
-        <div class="how-card">
-          <div class="how-number">4</div>
-          <div class="how-icon">🚀</div>
-          <h3>Enjoy!</h3>
-          <p>We bake fresh and deliver to your door!</p>
-        </div>
-
+        </article>
+        <article class="card step" data-reveal>
+          <span class="step__number">4</span>
+          <div class="icon-badge"><i class="fa-solid fa-truck-fast"></i></div>
+          <h3>Enjoy</h3>
+          <p>We bake fresh and deliver to your door.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- ================= note section ================= -->
-  <section class="note-section">
+  <section class="section">
     <div class="container">
-      <div class="note-box">
-        <span class="note-icon">💡</span>
-        <p>
-          <strong>Note:</strong> After selecting your box size, 
-          you will be taken to our shop to pick your cookie flavors. 
-          Mix and match as you like!
-        </p>
+      <div class="note" data-reveal>
+        <i class="fa-solid fa-circle-info"></i>
+        <p><strong>Note:</strong> After selecting your box size, you will be taken to our menu to pick your cookie flavors. Mix and match as you like.</p>
       </div>
     </div>
   </section>
-
 </main>
 
-<!-- ================= footer ================= -->
-<button id="backToTop" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
-  <i class="fas fa-cookie-bite"></i>
-</button>
-
-<footer class="footer">
-
-  <div class="footer-content">
-
-    <div class="footer-section">
-      <h3>Find Us</h3>
-      <div class="socials">
-        <a href="https://www.facebook.com/profile.php?id=61567054065532"
-           aria-label="Visit our Facebook page">
-          <i class="fab fa-facebook"></i>
-        </a>
-        <a href="https://www.instagram.com/dough_leycious/"
-           aria-label="Visit our Instagram page">
-          <i class="fab fa-instagram"></i>
-        </a>
-      </div>
-    </div>
-
-    <div class="footer-section">
-      <h3>Quick Links</h3>
-      <a href="index.php">Home</a>
-      <a href="menu.php">Menu</a>
-      <a href="aboutus.php">About Us</a>
-    </div>
-
-    <div class="footer-section">
-    <h3>Contact</h3>
-    <p>📧 <a href="mailto:k.munsayac1109@gmail.com">k.munsayac1109@gmail.com</a></p>
-    <p>📍 Available for delivery</p>
-    <a href="contact.php" class="contact-page-link">💬 Send us a message</a>
-</div>
-
-  </div>
-
-  <hr class="footer-divider">
-
-  <div class="footer-bottom">
-    <p>&copy; 2024 <span>Dough LEYcious</span>. All rights reserved.</p>
-  </div>
-</footer>
-
-<script src="script.js"></script>
-
-</body>
-</html>
-
+<?php include("site_footer.php"); ?>

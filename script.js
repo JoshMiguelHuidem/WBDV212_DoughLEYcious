@@ -1,11 +1,7 @@
-// ================= cart counter =================
-// kinukuha nito yung cart data sa localStorage, binibilang total quantity ng items.
 function updateCartCount() {
 
-  // Read cart items from localStorage.
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // Compute total quantity by summing each item's qty.
   const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
 
   const counters = document.querySelectorAll("#cart-count");
@@ -14,27 +10,39 @@ function updateCartCount() {
   });
 }
 
-
-// ================= carousel (header)=================
-// kinukuha nito yung para sa slideshow sa header, tapos nagse-set ng interval para mag-auto change every 3 seconds.
 let slides = document.querySelectorAll(".slide");
 let current = 0;
-// ginagawa nito active yung first slide pag na load page, para hindi blank agad yung header.
 function showSlide(index) {
   slides.forEach((slide) => slide.classList.remove("active"));
   slides[index].classList.add("active");
 }
-// dito naman nag nnext slide siya automatically every 3 seconds.
 function nextSlide() {
+  if (!slides.length) return;
   current = (current + 1) % slides.length;
   showSlide(current);
 }
-// auto change header every 3 seconds
 setInterval(nextSlide, 3000);
 
-// ================= Open ingredient modal (for menu) =================
 let selectedModalCard = null;
-// para naman mag open yung modal pag click yung ingredient(cookie) card sa menu, tapos nilalagay niya yung details ng item sa modal based on data attributes ng card.
+function updateModalTotal() {
+  const modal = document.getElementById("ingredientModal");
+  if (!modal || !selectedModalCard) return;
+
+  const btn = modal.querySelector(".add-to-cart-btn");
+  if (!btn) return;
+
+  const qtyInput = modal.querySelector(".quantity input[type='number']");
+  const qty = Math.max(0, parseInt(qtyInput ? qtyInput.value : "0", 10) || 0);
+  const priceText = selectedModalCard.getAttribute("data-price") || "";
+  const price = parseFloat(priceText.replace(/[^0-9.]/g, "")) || 0;
+  const total = qty * price;
+
+  btn.innerHTML =
+    qty > 0
+      ? `<i class="fa-solid fa-cart-plus"></i> Add to Cart <span class="btn__price">₱${total.toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>`
+      : `<i class="fa-solid fa-cart-plus"></i> Add to Cart`;
+}
+
 function openIngredientModal(card) {
   const modal = document.getElementById("ingredientModal");
   if (!modal) return;
@@ -48,9 +56,15 @@ function openIngredientModal(card) {
   const description = card.getAttribute("data-description");
   const ingredients = [];
 
-
-  document.getElementById("modalImg").src = img;
-  document.getElementById("modalImg").alt = name;
+  const modalImg = document.getElementById("modalImg");
+  if (img) {
+    modalImg.src = img;
+    modalImg.hidden = false;
+  } else {
+    modalImg.removeAttribute("src");
+    modalImg.hidden = true;
+  }
+  modalImg.alt = name;
   document.getElementById("modalName").textContent = name;
   document.getElementById("modalTagline").textContent = tagline;
   document.getElementById("modalPrice").textContent = price;
@@ -58,6 +72,7 @@ function openIngredientModal(card) {
 
   const qtyInput = modal.querySelector(".quantity input[type='number']");
   if (qtyInput) qtyInput.value = 0;
+  updateModalTotal();
 
   const list = document.getElementById("modalIngredients");
   list.innerHTML = "";
@@ -71,8 +86,6 @@ function openIngredientModal(card) {
   document.body.style.overflow = "hidden";
 }
 
-
-// ================= Close ingredient modal (for menu) =================
 function closeIngredientModal() {
   const modal = document.getElementById("ingredientModal");
   if (!modal) return;
@@ -80,13 +93,11 @@ function closeIngredientModal() {
   document.body.style.overflow = "";
 }
 
-// ================= Modal quantity and add to cart =================
-// ito naman yung function na nag aadd ng item sa cart pag nasa modal tapos click yung add to cart button, binabasa niya yung quantity input sa modal.
 function addModalToCart() {
   const modal = document.getElementById("ingredientModal");
   if (!modal) return;
   if (!selectedModalCard) {
-    showToast("⚠️ Please select an item first!");
+    showToast("Please select an item first!");
     return;
   }
 
@@ -94,7 +105,7 @@ function addModalToCart() {
   const qty = Math.max(0, parseInt(qtyInput ? qtyInput.value : "0", 10) || 0);
 
   if (qty <= 0) {
-    showToast("⚠️ Please select a quantity first!");
+    showToast("Please select a quantity first!");
     return;
   }
 
@@ -125,20 +136,16 @@ function addModalToCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartCount();
 
-
-  // If currently on cart page (rare), refresh UI
   if (document.getElementById("cart-items")) {
     displayCart();
   }
 
-  // Reset modal quantity input back to 0 after adding
   if (qtyInput) qtyInput.value = 0;
+  updateModalTotal();
 
   showToast(`Added to cart: ${name}`, { type: "success" });
 }
 
-
-// ================= notification =================
 function showToast(message, options = {}) {
   let toast = document.getElementById("toast");
 
@@ -151,13 +158,12 @@ function showToast(message, options = {}) {
 
   const isSuccess = options?.type === "success";
 
-  // Reset classes each time
   toast.classList.remove("toast-success");
   toast.classList.add("toast");
 
   if (isSuccess) {
     toast.classList.add("toast-success");
-    toast.innerHTML = `<span class="toast-success-text">✅ ${message}</span>`;
+    toast.innerHTML = `<span class="toast-success-text">${message}</span>`;
   } else {
     toast.textContent = message;
   }
@@ -169,9 +175,6 @@ function showToast(message, options = {}) {
   }, 3000);
 }
 
-
-// ================= confirmation toast =================
-// ito yung custom confirmation toast na lumalabas pag click yung clear cart button, para ma-confirm ng user if sure siya mag clear ng cart
 function showConfirmToast(message, onConfirm) {
   const existing = document.getElementById("confirm-toast");
   if (existing) existing.remove();
@@ -193,7 +196,6 @@ function showConfirmToast(message, onConfirm) {
 
   document.body.appendChild(overlay);
 
-  // -------------------- force reflow then add active class for animation ------------------
   requestAnimationFrame(() => {
     overlay.classList.add("active");
   });
@@ -217,17 +219,14 @@ function showConfirmToast(message, onConfirm) {
   });
 }
 
-// ================= quick add to cart (for recommendation cards) =================
-// ginagawa nito quick add to cart functionality para sa mga recommendation cards sa cart page, para mabilis mag add ng item sa cart without opening modal
 function quickAddToCart(name, price, imgSrc) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let existing = cart.find((item) => item.name === name);
 
-  // Enforce box limits for quick add buttons too
   const maxQty = getMaxQtyForOrderType();
   if (maxQty !== Infinity) {
     const currentQty = getCartTotalQty();
-    const extraQty = 1; // quick add always +1
+    const extraQty = 1;
     if (currentQty + extraQty > maxQty) {
       showBoxLimitToast();
       showToast(`Cannot add more than ${maxQty} cookies for this box.`);
@@ -244,31 +243,24 @@ function quickAddToCart(name, price, imgSrc) {
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartCount();
 
-  // If on cart page, refresh UI
   if (document.getElementById("cart-items")) {
     displayCart();
   }
 
-  // Keep your icons in toast ✅
-  showToast(`Added to cart: ${name}`, { type: "success" });
-
-  // -------------------- smooth scroll to cart section so user sees the update --------------------
   const cartSection = document.querySelector(".cart-section");
   if (cartSection) {
     cartSection.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
 
-// ================= order page =================
-//dito naman yung function na nag se-set ng order type (box of 6, 8, 12, or per piece) sa localStorage pag sa order page click yung button
 function selectOrder(type) {
   localStorage.setItem("orderType", type);
 
   const messages = {
-    "6pcs": "Box of 6 selected! 🍪",
-    "8pcs": "Box of 8 selected! 🍪🍪",
-    "12pcs": "Box of 12 selected! 🍪🍪🍪",
-    "per piece": "Per piece order selected! 🍪",
+    "6pcs": "Box of 6 selected!",
+    "8pcs": "Box of 8 selected!",
+    "12pcs": "Box of 12 selected!",
+    "per piece": "Per piece order selected!",
   };
 
   showToast(messages[type] || "Order selected!");
@@ -278,8 +270,6 @@ function selectOrder(type) {
   }, 1000);
 }
 
-// ================= ORDER LIMITS =================
-// ginagawa nito yung logic para i-enforce yung maximum quantity ng items sa cart based on order type
 function getMaxQtyForOrderType() {
   const orderType = localStorage.getItem("orderType") || "";
 
@@ -287,15 +277,12 @@ function getMaxQtyForOrderType() {
   if (orderType === "8pcs") return 8;
   if (orderType === "12pcs") return 12;
 
-  // pag per piece unlimited
   return Infinity;
 }
-// ito naman binibilang yung toal ng mga nakalagay sa cart
 function getCartTotalQty() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   return cart.reduce((sum, item) => sum + (item.qty || 0), 0);
 }
-// dito naman makikita pag puwede pa mag add ng item sa cart base sa current max limit ng order type
 function canAddQty(extraQty) {
   const maxQty = getMaxQtyForOrderType();
   if (maxQty === Infinity) return true;
@@ -303,7 +290,6 @@ function canAddQty(extraQty) {
   const currentQty = getCartTotalQty();
   return currentQty + extraQty <= maxQty;
 }
-// nagbibigay lang to ng warning pag na reach na yung limit ng box
 function showBoxLimitToast() {
   const orderType = localStorage.getItem("orderType") || "";
   const limits = {
@@ -318,7 +304,6 @@ function showBoxLimitToast() {
   showToast(`You can only order up to ${maxQty} cookies for this box.`);
 }
 
-// ================= navigation =================
 function goToShop() {
   window.location.href = "menu.php";
 }
@@ -327,21 +312,23 @@ function goToOrderPage() {
   window.location.href = "order.php";
 }
 
-// ================= cart page =================
+function renderThumb(item) {
+  const img = item.imgSrc
+    ? `<img src="${item.imgSrc}" alt="${item.name}" onerror="this.remove()">`
+    : "";
+  return `<div class="thumb">${img}<i class="fa-solid fa-cookie-bite"></i></div>`;
+}
+
 const deliveryRates = {
   ncr: { base: 50, minOrder: 300 },
 };
-// function naman nito ay dinidisplay niya yung mga item na nasa cart 
 function displayCart() {
   const cartContainer = document.getElementById("cart-items");
   const subtotalDisplay = document.getElementById("subtotal-price");
   const totalDisplay = document.getElementById("total-price");
 
-  // The form page has more advanced delivery fee logic based on address
   const deliveryFee = 50;
 
-
-  // -------------------- gumagana lang sa cart page --------------------
   if (!cartContainer) return;
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -349,14 +336,10 @@ function displayCart() {
   if (cart.length === 0) {
     cartContainer.innerHTML = `
       <div class="empty-cart">
-<div class="empty-cart-icon">🛒</div>
-
-        <h3>Your cart is empty!</h3>
+        <div class="empty-cart-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+        <h3>Your cart is empty</h3>
         <p>Looks like you haven't added any cookies yet.</p>
-
-        <button class="hero-btn" onclick="location.href='menu.php'">
-          🍪 Start Shopping
-        </button>
+        <button type="button" class="btn btn--primary" onclick="location.href='menu.php'">Start Shopping</button>
       </div>
     `;
 
@@ -365,7 +348,6 @@ function displayCart() {
     updateCartCount();
     return;
   }
-// dito naman cinocompute niya yung total ng mga price sa cart then nag input ng deliv fee
   let subtotal = 0;
   cartContainer.innerHTML = "";
 
@@ -375,9 +357,7 @@ function displayCart() {
     cartContainer.innerHTML += `
       <div class="cart-item">
 
-        <img src="${item.imgSrc || "images/choco chip.jpg"}" 
-             alt="${item.name}"
-             onerror="this.src='images/choco chip.jpg'">
+        ${renderThumb(item)}
         <div class="cart-item-info">
           <h3>${item.name}</h3>
           <p>₱${item.price} x ${item.qty}</p>
@@ -404,8 +384,6 @@ function displayCart() {
   updateCartCount();
 }
 
-// ================= INCREASE QTY =================
-// dito chinecheck niya yung limit bawat dagdag and nirerefresh yung na sa  cart
 function increaseQty(index) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -421,15 +399,12 @@ function increaseQty(index) {
   updateCartCount();
 }
 
-// ================= DECREASE QTY =================
-// dito naman nagbabawas lang siya ng item
 function decreaseQty(index) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (cart[index].qty > 1) {
     cart[index].qty -= 1;
     
-    // -------------------- mawawala yung item pag nag reach ng 0 --------------------
   } else {
     cart.splice(index, 1);
     showToast("Item removed from cart!");
@@ -440,7 +415,6 @@ function decreaseQty(index) {
   updateCartCount();
 }
 
-// ================= remove item =================
 function removeItem(index) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   const removedName = cart[index].name;
@@ -448,23 +422,21 @@ function removeItem(index) {
   localStorage.setItem("cart", JSON.stringify(cart));
   displayCart();
   updateCartCount();
-  showToast(`🗑️ ${removedName} removed from cart!`);
+  showToast(`${removedName} removed from cart!`);
 }
 
-// ================= for clear cart =================
-// dito nagpapakita siya ng confirmation notif and then nirereload niya yung page after confirming if yes
 function clearCart() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (cart.length === 0) {
-    showToast("⚠️ Your cart is already empty!");
+    showToast("Your cart is already empty!");
     return;
   }
 
   showConfirmToast("Are you sure you want to clear your cart?", () => {
     localStorage.removeItem("cart");
     localStorage.removeItem("orderType");
-    showToast("🗑️ Cart cleared!");
+    showToast("Cart cleared!");
 
     setTimeout(() => {
       location.reload();
@@ -472,21 +444,17 @@ function clearCart() {
   });
 }
 
-// ================= checkout button (cart page) =================
 function checkout() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (cart.length === 0) {
-    showToast("⚠️ Your cart is empty! Add some cookies first 🍪");
+    showToast("Your cart is empty! Add some cookies first.");
     return;
   }
 
-  // -------------------- redirect to form page - cart data stays in localStorage --------------------
   window.location.href = "form.php";
 }
 
-// ================= CHECKOUT PAGE FUNCTIONS  =================
-// dito naman pinapakita yung ordered items, prices, and total 
 function displayCheckoutItems() {
   const checkoutContainer = document.getElementById("checkout-items");
   const orderTotals = document.getElementById("order-totals");
@@ -497,7 +465,6 @@ function displayCheckoutItems() {
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // ------------ empty cart ------------
   if (cart.length === 0) {
     if (emptyMsg) emptyMsg.style.display = "block";
     if (orderTotals) orderTotals.style.display = "none";
@@ -509,7 +476,6 @@ function displayCheckoutItems() {
   if (orderTotals) orderTotals.style.display = "block";
   if (proceedBtn) proceedBtn.disabled = false;
 
-  // ------------ calculate subtotal ------------
   let subtotal = 0;
   let orderType = localStorage.getItem("orderType") || "";
   let itemsHTML = "";
@@ -521,8 +487,8 @@ if (orderType) {
     <div class="box-summary">
       <p><strong>
         ${orderType === "per piece" 
-          ? "🍪 Your selected cookies per piece:" 
-          : `🍪 Your box of ${orderType} contains:`}
+          ? `<i class="fa-solid fa-cookie-bite"></i> Your selected cookies per piece:` 
+          : `<i class="fa-solid fa-cookie-bite"></i> Your box of ${orderType} contains:`}
       </strong></p>
       <p>${cookieList}</p>
       <hr>
@@ -535,10 +501,7 @@ if (orderType) {
 
     itemsHTML += `
       <div class="checkout-item">
-        <img src="${item.imgSrc || "images/choco chip.jpg"}" 
-             alt="${item.name}"
-             class="checkout-item-img"
-             onerror="this.src='images/choco chip.jpg'">
+        ${renderThumb(item)}
         <div class="checkout-item-info">
           <h4>${item.name}</h4>
           <p>₱${item.price.toFixed(2)} × ${item.qty}</p>
@@ -564,9 +527,7 @@ if (orderType) {
   if (totalEl) totalEl.textContent = "₱" + total.toFixed(2);
 }
 
-// ================= OPEN CHECKOUT MODAL  =================
 function openCheckoutModal() {
-  // Require Terms & Conditions agreement (per session) before opening checkout form
   const alreadyAgreed = sessionStorage.getItem("termsAgreed") === "true";
   if (!alreadyAgreed) {
     openTermsModal();
@@ -576,11 +537,10 @@ function openCheckoutModal() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (cart.length === 0) {
-    showToast("⚠️ Your cart is empty! Add some cookies first 🍪");
+    showToast("Your cart is empty! Add some cookies first.");
     return;
   }
 
-  // --------------------- fill modal order summary ---------------------
   let subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   let deliveryFee = 50;
   let total = subtotal + deliveryFee;
@@ -589,12 +549,12 @@ function openCheckoutModal() {
   if (summaryContainer) {
     let orderType = localStorage.getItem("orderType") || "";
 
-    let summaryHTML = `<h4>📋 Order Summary</h4>`;
+    let summaryHTML = `<h4>Order Summary</h4>`;
 
     if (orderType) { 
       summaryHTML += `
       <p class="box-message">
-      🍪 Your box of ${orderType} contains:
+      <i class="fa-solid fa-cookie-bite"></i> Your box of ${orderType} contains:
       </p>
       `;
     }
@@ -637,13 +597,11 @@ function openCheckoutModal() {
     dateInput.setAttribute("min", today);
   }
 
-  // ================= DELIVERY FEE =================
   const deliveryLocationEl = document.getElementById("delivery-location");
   const deliveryEl = document.getElementById("delivery-fee");
   const orderTotalEl = document.getElementById("order-total");
   const checkoutAddressEl = document.getElementById("checkout-address");
 
-  // compute initial values
   const cartForFee = JSON.parse(localStorage.getItem("cart")) || [];
   const baseSubtotal = cartForFee.reduce((sum, item) => sum + item.price * item.qty, 0);
 
@@ -652,7 +610,6 @@ function openCheckoutModal() {
     return address.includes("marikina");
   };
 
-  // Use same delivery rates as cart page (fallback to ₱50 if missing)
   const resolvedDeliveryFeeFromLocation = (locationValue) => {
     const location = String(locationValue || "ncr").toLowerCase();
     const rates = {
@@ -661,7 +618,6 @@ function openCheckoutModal() {
 
     const chosen = rates[location] || rates.ncr;
     
-    // free delivery rules (by min order)
     if (baseSubtotal >= chosen.minOrder) return 0;
     return chosen.base;
   };
@@ -677,7 +633,6 @@ function openCheckoutModal() {
 
   const refreshDeliveryFee = () => {
 
-    // If nag enter user na taga Marikina sa address, delivery fee is FREE.
     if (addressContainsMarikina()) {
       updateTotals(0);
       return;
@@ -689,14 +644,11 @@ function openCheckoutModal() {
       return;
     }
 
-    // fallback to fixed base fee (current behavior)
     updateTotals(50);
   };
 
-  // initial fee calculation on modal open
   refreshDeliveryFee();
 
-  // for changes in delivery location or address input
   if (deliveryLocationEl) {
     deliveryLocationEl.addEventListener("change", refreshDeliveryFee);
   }
@@ -705,7 +657,6 @@ function openCheckoutModal() {
     checkoutAddressEl.addEventListener("change", refreshDeliveryFee);
   }
 
-  // ===================== show modal =====================
   const modal = document.getElementById("checkout-modal");
 
   if (modal) {
@@ -714,7 +665,6 @@ function openCheckoutModal() {
   }
 }
 
-// ================= close checkout modal =================
 function closeCheckoutModal() {
   const modal = document.getElementById("checkout-modal");
   if (modal) {
@@ -723,8 +673,6 @@ function closeCheckoutModal() {
   }
 }
 
-// ================= TERMS MODAL =================
-//ito naman yung pop up na modal pag mag check out and meron siyang checkbox to confirm 
 function openTermsModal() {
   const modal = document.getElementById("terms-modal");
   if (!modal) return;
@@ -750,7 +698,6 @@ function closeTermsModal() {
 
 function agreeAndProceed() {
 
-  // terms and conditions agreement (one time lang to per session)
   sessionStorage.setItem("termsAgreed", "true");
 
   const checkbox = document.getElementById("terms-agree-checkbox");
@@ -761,17 +708,15 @@ function agreeAndProceed() {
 
   if (!checkbox.checked) {
     if (errorEl) errorEl.style.display = "block";
-    showToast("⚠️ Please agree to the Terms and Conditions.");
+    showToast("Please agree to the Terms and Conditions.");
     return;
   }
 
   closeTermsModal();
-  // After agreement, open the checkout modal normally
   openCheckoutModal();
 
 }
 
-// ================= close success modal =================
 function closeSuccessModal() {
 
   const modal = document.getElementById("success-modal");
@@ -781,24 +726,11 @@ function closeSuccessModal() {
   }
 }
 
-// ================= show file name =================
-function showFileName(input) {
-  const fileNameDisplay = document.getElementById("file-name-display");
-  if (input.files && input.files[0] && fileNameDisplay) {
-    fileNameDisplay.textContent = "📄 " + input.files[0].name;
-    fileNameDisplay.classList.add("show");
-  }
-}
-
-// ================= INPUT VALIDATION =================
 function validateName(name) {
-  // Letters + spaces only (no special characters)
   const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
   return nameRegex.test(name);
 }
 
-
-// ------------- validate phone - exactly 11 digits, no letters ------------------
 function validatePhone(phone) {
   const phoneClean = phone.replace(/[\s\-]/g, "");
   const phoneRegex = /^\d{11}$/;
@@ -809,12 +741,10 @@ function containsNumbers(str) {
   return /\d/.test(str);
 }
 
-// -------------- check if string contains letters --------------------
 function containsLetters(str) {
   return /[A-Za-z]/.test(str);
 }
 
-// ================= submit order =================
 function submitOrder(event) {
   event.preventDefault();
 
@@ -822,7 +752,6 @@ function submitOrder(event) {
   const phone = document.getElementById("checkout-phone").value.trim();
   const address = document.getElementById("checkout-address").value.trim();
 
-  // ================= puwede lang delivery locs between ncr =================
   const ncrKeywords = [
     "ncr",
       "metro manila",
@@ -852,7 +781,7 @@ function submitOrder(event) {
   })();
 
   if (!isNcr) {
-    showToast("❌ Delivery is available within NCR only. Please enter an NCR address.");
+    showToast("Delivery is available within NCR only. Please enter an NCR address.");
     document.getElementById("checkout-address").focus();
     return;
   }
@@ -865,27 +794,25 @@ function submitOrder(event) {
     ? document.getElementById("checkout-notes").value.trim()
     : "";
 
-     // -------------------- validate all required fields ------------------
   if (!name || !phone || !address || !date || !time || !proof) {
-    showToast("⚠️ Please fill in all required fields!");
+    showToast("Please fill in all required fields!");
     return;
   }
 
   if (containsNumbers(name)) {
-    showToast("⚠️ Name should contain letters only, no numbers!");
+    showToast("Name should contain letters only, no numbers!");
     document.getElementById("checkout-name").focus();
     return;
   }
 
   if (!validateName(name)) {
-    showToast("⚠️ Please enter a valid name (letters only)!");
+    showToast("Please enter a valid name (letters only)!");
     document.getElementById("checkout-name").focus();
     return;
   }
 
-   // ------------- validate phone - no letters, exactly 11 digits ------------------
   if (containsLetters(phone)) {
-    showToast("⚠️ Phone number should contain numbers only!");
+    showToast("Phone number should contain numbers only!");
     document.getElementById("checkout-phone").focus();
     return;
   }
@@ -894,24 +821,22 @@ function submitOrder(event) {
 
   if (phoneClean.length !== 11) {
     showToast(
-      `⚠️ Phone number must be exactly 11 digits! (currently ${phoneClean.length})`
+      `Phone number must be exactly 11 digits! (currently ${phoneClean.length})`
     );
     document.getElementById("checkout-phone").focus();
     return;
   }
 
   if (!validatePhone(phone)) {
-    showToast("⚠️ Please enter a valid 11-digit phone number!");
+    showToast("Please enter a valid 11-digit phone number!");
     document.getElementById("checkout-phone").focus();
     return;
   }
 
-  // get cart for summary
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   let deliveryFee = 50;
   let total = subtotal + deliveryFee;
-
 
   const cartFields = document.getElementById("cart-fields");
   cartFields.innerHTML = "";
@@ -924,11 +849,9 @@ function submitOrder(event) {
     `;
   });
 
-
   document.getElementById("checkout-form").submit();
 }
 
-// ================= receipt printing =================
 function openReceiptModal() {
   const modal = document.getElementById("receipt-modal");
   if (!modal) return;
@@ -959,14 +882,11 @@ function printReceipt() {
   }
 }
 
-
-// ================= total =================
 function getTotal() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 }
 
-// ================= Back to top button =================
 (function initBackToTop() {
   const btn = document.getElementById("backToTop");
   if (!btn) return;
@@ -984,15 +904,11 @@ function getTotal() {
   });
 })();
 
-  // ================= hamburger menu (slide down) =================
-
-  // Works across all pages that have navbar and doesn't throw errors on pages without it
   document.querySelectorAll(".navbar").forEach((navbar) => {
     const btn = navbar.querySelector(".nav-toggle-btn");
     const links = navbar.querySelector(".nav-links");
     if (!btn || !links) return;
 
-    // start closed
     links.classList.remove("nav-open");
     btn.setAttribute("aria-expanded", "false");
 
@@ -1006,7 +922,6 @@ function getTotal() {
       toggle();
     });
 
-    // close when clicking a menu option
     links.querySelectorAll("a").forEach((a) => {
       a.addEventListener("click", () => {
         links.classList.remove("nav-open");
@@ -1014,7 +929,6 @@ function getTotal() {
       });
     });
 
-    // close when clicking outside
     document.addEventListener("click", (e) => {
       if (!navbar.contains(e.target)) {
         links.classList.remove("nav-open");
@@ -1022,21 +936,16 @@ function getTotal() {
       }
     });
   });
-  // ---- update cart count on every page ----
   updateCartCount();
 
-  // cart page
   if (document.getElementById("cart-items")) {
     displayCart();
   }
 
-  // checkout/form page
   if (document.getElementById("checkout-items")) {
     displayCheckoutItems();
   }
 
-
-  // ================= cookie modal listeners (with null check) =================
   const ingredientModal = document.getElementById("ingredientModal");
   if (ingredientModal) {
     ingredientModal.addEventListener("click", function (e) {
@@ -1045,7 +954,6 @@ function getTotal() {
       }
     });
 
-    //modal quantity + / - buttons
     const qtyInput = ingredientModal.querySelector(".quantity input[type='number']");
     const plusBtn = ingredientModal.querySelector(".quantity .plus");
     const minusBtn = ingredientModal.querySelector(".quantity .minus");
@@ -1054,7 +962,12 @@ function getTotal() {
     const setQty = (v) => {
       if (!qtyInput) return;
       qtyInput.value = String(Math.max(0, v));
+      updateModalTotal();
     };
+
+    if (qtyInput) {
+      qtyInput.addEventListener("input", updateModalTotal);
+    }
 
     if (plusBtn) {
       plusBtn.addEventListener("click", (e) => {
@@ -1071,8 +984,6 @@ function getTotal() {
     }
   }
 
-
-  // ================= shop page product card listeners =================
   const productCards = document.querySelectorAll(".product-card");
 
   if (productCards.length > 0) {
@@ -1105,7 +1016,7 @@ function getTotal() {
           let qty = parseInt(input.value);
 
           if (qty <= 0) {
-            showToast("⚠️ Please select a quantity first!");
+            showToast("Please select a quantity first!");
             return;
           }
 
@@ -1118,7 +1029,6 @@ function getTotal() {
 
           const maxQty = getMaxQtyForOrderType();
 
-          // Enforce limit BEFORE committing the add (so user doesn't lose their selected quantity if they exceed the box limit)
           if (maxQty !== Infinity) {
             const currentQty = getCartTotalQty();
             if (currentQty + qty > maxQty) {
@@ -1145,13 +1055,11 @@ function getTotal() {
 
           showToast(`Added to cart: ${name}`, { type: "success" });
 
-
         });
       }
     });
   }
 
-  // ================= checkout modal listeners =================
   document.addEventListener("click", function (e) {
     const checkoutModal = document.getElementById("checkout-modal");
     const successModal = document.getElementById("success-modal");
@@ -1168,7 +1076,6 @@ function getTotal() {
     }
   });
 
-  // ================= ESC key closes all modals =================
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
       closeIngredientModal();
@@ -1179,58 +1086,181 @@ function getTotal() {
     }
   });
 
-  // ================= Full Name block numbers in real-time =================
   const nameInput = document.getElementById("checkout-name");
 
-  // pinipigilan niya yung number keys from being typed and show real-time feedback
   if (nameInput) {
     nameInput.addEventListener("keypress", function (e) {
       if (/\d/.test(e.key)) {
         e.preventDefault();
-        showToast("⚠️ Name should contain letters only, no numbers!");
+        showToast("Name should contain letters only, no numbers!");
       }
     });
 
     nameInput.addEventListener("input", function () {
       if (containsNumbers(this.value)) {
-        showToast("⚠️ Name should contain letters only, no numbers!");
+        showToast("Name should contain letters only, no numbers!");
         this.value = this.value.replace(/\d/g, "");
       }
     });
   }
 
-  // ================= Phone Number block letters in real time =================
   const phoneInput = document.getElementById("checkout-phone");
   if (phoneInput) {
     phoneInput.addEventListener("keypress", function (e) {
       if (/[A-Za-z]/.test(e.key)) {
         e.preventDefault();
-        showToast("⚠️ Phone number should contain numbers only!");
+        showToast("Phone number should contain numbers only!");
       }
     });
 
-    // pinipigilan niya yung letter keys na ma-type just in case may user na mag t-type ng letters, may real-time feedback
     phoneInput.addEventListener("input", function () {
       if (containsLetters(this.value)) {
-        showToast("⚠️ Phone number should contain numbers only!");
+        showToast("Phone number should contain numbers only!");
         this.value = this.value.replace(/[A-Za-z]/g, "");
       }
 
-      // tinatanggal niya pag or more like di niya binabasa pag may non-digit characters
       let digitsOnly = this.value.replace(/\D/g, "");
 
-      // limit to 11 digits max (para hindi lumagpas sa 11 digits kahit walang letters)
       if (digitsOnly.length > 11) {
         digitsOnly = digitsOnly.substring(0, 11);
         this.value = digitsOnly;
-        showToast("⚠️ Phone number must be exactly 11 digits!");
+        showToast("Phone number must be exactly 11 digits!");
       }
     });
     phoneInput.addEventListener("blur", function () {
       const digitsOnly = this.value.replace(/\D/g, "");
       if (digitsOnly.length > 0 && digitsOnly.length !== 11) {
-        showToast(`⚠️ Phone number must be exactly 11 digits! (currently ${digitsOnly.length})`
+        showToast(`Phone number must be exactly 11 digits! (currently ${digitsOnly.length})`
         );
       }
     });
   }
+
+(function initReveal() {
+  const items = document.querySelectorAll("[data-reveal]");
+  if (!items.length || !("IntersectionObserver" in window)) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  document.documentElement.classList.add("reveal-ready");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add("is-visible");
+        observer.unobserve(el);
+        setTimeout(() => el.removeAttribute("data-reveal"), 1200);
+      });
+    },
+    { threshold: 0.12 }
+  );
+
+  items.forEach((el) => observer.observe(el));
+})();
+
+(function initTheme() {
+  const root = document.documentElement;
+  document.querySelectorAll(".theme-toggle").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch (e) {}
+    });
+  });
+})();
+
+(function initNavGlass() {
+  const header = document.querySelector(".site-header");
+  if (!header) return;
+
+  const update = () => {
+    header.classList.toggle("is-scrolled", window.scrollY > 24);
+  };
+
+  window.addEventListener("scroll", update, { passive: true });
+  update();
+})();
+
+(function initAdminControls() {
+  const successToast = (message) => showToast(message, { type: "success" });
+
+  document.querySelectorAll("form[data-ajax]").forEach((form) => {
+    form.querySelectorAll("[data-autosubmit]").forEach((field) => {
+      field.addEventListener("change", () => {
+        if (!field.checkValidity()) {
+          field.reportValidity();
+          return;
+        }
+        if (form.requestSubmit) {
+          form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event("submit", { cancelable: true }));
+        }
+      });
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      fetch(form.getAttribute("action") || window.location.pathname, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        credentials: "same-origin",
+      })
+        .then((res) => (res.ok ? res.text() : Promise.reject()))
+        .then((text) => {
+          if (text.trim() !== "ok") return Promise.reject();
+
+          if (form.dataset.ajax === "toggle") {
+            const input = form.querySelector("input[name='available']");
+            const sw = form.querySelector(".switch");
+            const label = form.querySelector(".switch__label");
+            const card = form.closest(".pm-card");
+            const nowAvailable = input.value === "1";
+
+            input.value = nowAvailable ? "0" : "1";
+            sw.setAttribute("aria-checked", nowAvailable ? "true" : "false");
+            if (label) label.textContent = nowAvailable ? "Available" : "Unavailable";
+            if (card) card.classList.toggle("pm-card--off", !nowAvailable);
+            updateProductCounts();
+            successToast(nowAvailable ? "Marked as available" : "Marked as unavailable");
+          } else {
+            successToast("Price updated");
+          }
+        })
+        .catch(() => {
+          showToast("Could not save. Please try again.");
+        });
+    });
+  });
+
+  function updateProductCounts() {
+    const available = document.querySelectorAll(".pm-card:not(.pm-card--off)").length;
+    const unavailable = document.querySelectorAll(".pm-card.pm-card--off").length;
+    const availableEl = document.getElementById("count-available");
+    const unavailableEl = document.getElementById("count-unavailable");
+    if (availableEl) availableEl.textContent = available;
+    if (unavailableEl) unavailableEl.textContent = unavailable;
+  }
+
+  const search = document.getElementById("product-search");
+  if (search) {
+    search.addEventListener("input", () => {
+      const query = search.value.trim().toLowerCase();
+      let shown = 0;
+
+      document.querySelectorAll(".pm-card").forEach((card) => {
+        const match = (card.getAttribute("data-search") || "").includes(query);
+        card.hidden = !match;
+        if (match) shown++;
+      });
+
+      const empty = document.getElementById("product-empty");
+      if (empty) empty.hidden = shown > 0;
+    });
+  }
+})();
