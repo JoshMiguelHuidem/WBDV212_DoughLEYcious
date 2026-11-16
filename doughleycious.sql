@@ -99,15 +99,32 @@ CREATE TABLE `tbl_products` (
 --
 
 INSERT INTO `tbl_products` (`product_id`, `product_name`, `category`, `price`, `description`, `is_hidden`, `stock`, `low_stock_level`) VALUES
-(1, 'Classic Chocolate Chip', 'Cookies', 55.00, 'The timeless favorite everyone loves', 0, 10, 5),
-(2, 'Oatmeal Chocolate', 'Cookies', 69.00, 'Rich, fudgy, and intensely chocolatey', 0, 10, 5),
-(3, 'Biscoff Choco Chip', 'Cookies', 75.00, 'Caramelized cookie with a hint of cinnamon', 0, 10, 5),
-(4, 'Oreo Crumbl', 'Cookies', 65.00, 'Creamy filling between two chocolate wafers', 0, 10, 5),
-(5, 'S\'mores Cookie', 'Cookies', 59.00, 'Graham, chocolate & toasted marshmallow', 0, 10, 5),
-(6, 'Chocolate Cake', 'Cakes', 219.00, 'Simple chocolate cake good for special dates!', 1, 10, 5),
+(1, 'Classic Chocolate Chip', 'Cookies', 40.00, 'The timeless favorite everyone loves', 0, 10, 5),
+(2, 'Oatmeal Delight', 'Cookies', 40.00, 'Rich, fudgy, and intensely chocolatey', 0, 10, 5),
+(3, 'Biscoff Bliss', 'Cookies', 45.00, 'Caramelized cookie with a hint of cinnamon', 0, 10, 5),
+(4, 'S\'moreo Crunch', 'Cookies', 45.00, 'Fudgy, Creamy marshmallow filling oreos', 0, 10, 5),
+(5, 'Campfire S\'mores', 'Cookies', 40.00, 'Graham, chocolate & toasted marshmallow', 0, 10, 5),
+(6, 'Salted Caramel Scoopable', 'Scoopable', 109.00, 'Soft chocolate chip cookies topped with ice cream and salted caramel syrup', 1, 10, 5),
 (7, 'Chocolate Chip Cake', 'Cakes', 180.00, 'A delightful blend of cake and cookie textures', 0, 10, 5),
-(8, 'Flat Bread', 'Bread', 109.00, 'Flaky, buttery, and filled with creamy cheese', 1, 10, 5),
-(9, 'Crinkles', 'Chocolate Cravings', 119.00, 'Rich, intense chocolate flavor', 0, 10, 5);
+(8, 'Strawberry Scoopable', 'Scoopable', 109.00, 'Soft chocolate chip cookies, vanilla ice cream, and strawberry drizzle.', 1, 10, 5),
+(9, 'Chocolate Scoopable', 'Scoopable', 109.00, 'Soft chocolate chip cookies and vanilla ice cream drizzled with rich chocolate', 0, 10, 5);
+
+
+-- inserted images for products
+
+ALTER TABLE tbl_products 
+ADD COLUMN image VARCHAR(255) DEFAULT NULL AFTER description;
+
+
+UPDATE tbl_products SET image = 'images/choco chip.jpg'          WHERE product_id = 1; -- Classic Chocolate Chip
+UPDATE tbl_products SET image = 'images/oatmeal choco.jpg'       WHERE product_id = 2; -- Oatmeal Delight
+UPDATE tbl_products SET image = 'images/biscoff.png'             WHERE product_id = 3; -- Biscoff Bliss
+UPDATE tbl_products SET image = 'images/oreo.jpg'                WHERE product_id = 4; -- S'moreo Crunch
+UPDATE tbl_products SET image = 'images/smores.jpg'              WHERE product_id = 5; -- Campfire S'mores
+UPDATE tbl_products SET image = 'images/Salted Caramel.png'      WHERE product_id = 6; -- Salted Caramel Scoopable
+UPDATE tbl_products SET image = 'images/chocolate chip cake.jpg' WHERE product_id = 7; -- Chocolate Chip Cake
+UPDATE tbl_products SET image = 'images/Strawberry.png'          WHERE product_id = 8; -- Strawberry Scoopable
+UPDATE tbl_products SET image = 'images/Chocolate.png'           WHERE product_id = 9; -- Chocolate Scoopable
 
 --
 -- Indexes for dumped tables
@@ -169,4 +186,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-$cfg['AllowUserDropDatabase'] = true;
