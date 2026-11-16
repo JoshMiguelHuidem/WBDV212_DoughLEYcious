@@ -17,7 +17,7 @@
   <section class="section">
     <div class="container story">
       <div class="media story__media" data-reveal>
-        <i class="fa-solid fa-cookie-bite"></i>
+        <img src="images/logo.png" alt="DoughLEYcious">
       </div>
 
       <div class="story__text" data-reveal>
@@ -80,7 +80,9 @@
       </div>
 
       <article class="card owner" data-reveal>
-        <div class="media owner__media"><i class="fa-regular fa-user"></i></div>
+        <div class="media owner__media">
+          <img src="images\Owner of DoughLEYcious.jpg" alt="Kirsten Holley Munsayac">
+        </div>
         <div class="owner__body">
           <h3>Kirsten Holley Munsayac</h3>
           <p class="owner__role">Head Baker &amp; Founder</p>

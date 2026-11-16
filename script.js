@@ -57,13 +57,17 @@ function openIngredientModal(card) {
   const ingredients = [];
 
   const modalImg = document.getElementById("modalImg");
+  const modalIcon = modal.querySelector(".modal__media i");
   if (img) {
     modalImg.src = img;
     modalImg.hidden = false;
+    if (modalIcon) modalIcon.style.display = "none";
   } else {
     modalImg.removeAttribute("src");
     modalImg.hidden = true;
+    if (modalIcon) modalIcon.style.display = "";
   }
+
   modalImg.alt = name;
   document.getElementById("modalName").textContent = name;
   document.getElementById("modalTagline").textContent = tagline;

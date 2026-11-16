@@ -38,12 +38,20 @@
 
         $product = $execProduct->fetch_assoc();
 
-        if ((int) $product['is_available'] == 0) {
-            $problems[] = $product['product_name'] . " is currently unavailable.";
+        $currentStock = (int) $product['stock'];
+
+        if ($currentStock <= 0) {
+            $problems[] = $product['product_name'] . " is currently out of stock.";
+            continue;
+        }
+
+        if ($currentStock < $qty) {
+            $problems[] = "Only " . $currentStock . " left for " . $product['product_name'] . ".";
             continue;
         }
 
         $items[] = array(
+            "id" => (int) $product['product_id'],
             "name" => $product['product_name'],
             "price" => (float) $product['price'],
             "qty" => $qty
@@ -84,12 +92,17 @@
     $order_id = $con->insert_id;
 
     foreach ($items as $item) {
+        $product_id = (int) $item['id'];
         $product_name = $con->real_escape_string($item['name']);
         $price = $item['price'];
-        $qty = $item['qty'];
+        $qty = (int) $item['qty'];
 
         $con->query("INSERT INTO tbl_order_items (order_id, product_name, price, qty)
                      VALUES ($order_id, '$product_name', $price, $qty)");
+
+        $con->query("UPDATE tbl_products 
+                     SET stock = GREATEST(0, stock - $qty) 
+                     WHERE product_id = $product_id");
     }
 
     $pageTitle = "Order Placed";

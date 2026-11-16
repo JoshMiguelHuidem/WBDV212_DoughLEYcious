@@ -8,9 +8,9 @@
 <main>
   <header class="hero">
     <div class="hero__slides" aria-hidden="true">
-      <div class="slide active"><i class="fa-solid fa-cookie-bite"></i></div>
-      <div class="slide"><i class="fa-solid fa-cake-candles"></i></div>
-      <div class="slide"><i class="fa-solid fa-bread-slice"></i></div>
+      <div class="slide active"><img src="images/header.jpg" alt="header image"></div>
+      <div class="slide"><img src="images/header 2.png" alt="header image 2"></div>
+      <div class="slide"><img src="images/header3.png" alt="header image 3"></div>
     </div>
     <div class="hero__overlay"></div>
 

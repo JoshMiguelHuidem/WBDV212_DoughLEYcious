@@ -25,9 +25,9 @@
 
     if (isset($_POST['toggle_availability'])) {
         $product_id = (int) $_POST['product_id'];
-        $available = ((int) $_POST['available'] == 1) ? 1 : 0;
+        $stock = ((int) $_POST['available'] == 1) ? 10 : 0;
 
-        $con->query("UPDATE tbl_products SET is_available = $available WHERE product_id = $product_id");
+        $con->query("UPDATE tbl_products SET stock = $stock WHERE product_id = $product_id");
 
         if ($isAjax) {
             echo "ok";
@@ -73,14 +73,15 @@
     $countAvailable = 0;
     $countUnavailable = 0;
 
-    while ($row = $execProducts->fetch_assoc()) {
-        $products[] = $row;
-        if ((int) $row['is_available'] == 1) {
-            $countAvailable++;
+      while ($row = $execProducts->fetch_assoc()) {
+      $products[] = $row;
+        if ((int) $row['stock'] > 0) {
+          $countAvailable++;
         } else {
-            $countUnavailable++;
+          $countUnavailable++;
         }
-    }
+      } 
+
 
     $pageTitle = "Products";
     $pageSubtitle = "Set prices, switch items on or off, and control what customers see.";
@@ -129,13 +130,14 @@
       </label>
     </div>
 
-    <div class="pm-grid">
+  <div class="pm-grid">
       <?php foreach ($products as $product) { ?>
         <?php
-            $available = ((int) $product['is_available'] == 1);
+            $available = ((int) $product['stock'] > 0);
             $name = htmlspecialchars($product['product_name']);
             $searchText = htmlspecialchars(strtolower($product['product_name'] . " " . $product['category']));
         ?>
+
         <article class="pm-card<?php if (!$available) { echo ' pm-card--off'; } ?>" data-search="<?php echo $searchText; ?>">
           <header class="pm-card__head">
             <h3><?php echo $name; ?></h3>

@@ -2,7 +2,7 @@
     require("database.php");
 
     $execOther = $con->query("SELECT * FROM tbl_products
-                              WHERE is_hidden = 0 AND is_available = 1 AND category <> 'Cookies'
+                              WHERE is_hidden = 0 AND stock > 0 AND category <> 'Cookies'
                               ORDER BY product_id
                               LIMIT 4");
 
@@ -90,20 +90,29 @@
             <?php
                 $icon = isset($otherIcons[$product['category']]) ? $otherIcons[$product['category']] : "fa-cookie-bite";
                 $jsName = htmlspecialchars(json_encode($product['product_name']), ENT_QUOTES);
+                $imgFile = !empty($product['image']) ? $product['image'] : "";
+                $jsImg = htmlspecialchars(json_encode($imgFile), ENT_QUOTES);
             ?>
             <article class="menu-card menu-card--static" data-reveal>
-              <div class="media menu-card__media"><i class="fa-solid <?php echo $icon; ?>"></i></div>
+              <div class="media menu-card__media">
+                <?php if ($imgFile !== "") { ?>
+                  <img src="<?php echo htmlspecialchars($imgFile); ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>" style="width:100%; height:100%; object-fit:cover;">
+                <?php } else { ?>
+                  <i class="fa-solid <?php echo $icon; ?>"></i>
+                <?php } ?>
+              </div>
               <div class="menu-card__body">
                 <h3 class="menu-card__title"><?php echo htmlspecialchars($product['product_name']); ?></h3>
                 <div class="menu-card__foot">
                   <span class="menu-card__price">₱<?php echo number_format($product['price'], 2); ?></span>
-                  <button type="button" class="btn btn--soft btn--sm" onclick="quickAddToCart(<?php echo $jsName; ?>, <?php echo (float) $product['price']; ?>, '')">
+                  <button type="button" class="btn btn--soft btn--sm" onclick="quickAddToCart(<?php echo $jsName; ?>, <?php echo (float) $product['price']; ?>, <?php echo $jsImg; ?>)">
                     <i class="fa-solid fa-cart-plus"></i> Add
                   </button>
                 </div>
               </div>
             </article>
           <?php } ?>
+        </div>
         </div>
       </div>
     </section>

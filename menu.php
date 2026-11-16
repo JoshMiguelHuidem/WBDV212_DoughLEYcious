@@ -69,18 +69,25 @@
         <div class="menu-grid">
           <?php foreach ($grouped[$category] as $product) { ?>
             <?php
-                $unavailable = ((int) $product['is_available'] == 0);
+                $unavailable = ((int) $product['stock'] <= 0);
                 $name = htmlspecialchars($product['product_name'], ENT_QUOTES);
-                $description = htmlspecialchars($product['description'], ENT_QUOTES);
+                $description = htmlspecialchars($product['description'] ?? '', ENT_QUOTES);
                 $priceText = number_format($product['price'], 2);
+                $img = htmlspecialchars($product['image'] ?? '', ENT_QUOTES);
             ?>
             <article class="menu-card<?php if ($unavailable) { echo ' menu-card--off'; } ?>"<?php if (!$unavailable) { echo ' onclick="openIngredientModal(this)"'; } ?> data-reveal
               data-name="<?php echo $name; ?>"
               data-tagline=""
               data-price="₱<?php echo $priceText; ?>"
-              data-img=""
+              data-img="<?php echo $img; ?>"
               data-description="<?php echo $description; ?>">
-              <div class="media menu-card__media"><i class="fa-solid <?php echo $icon; ?>"></i></div>
+              <div class="media menu-card__media">
+                <?php if (!empty($img)) { ?>
+                  <img src="<?php echo $img; ?>" alt="<?php echo $name; ?>" style="width:100%; height:100%; object-fit:cover;">
+                <?php } else { ?>
+                  <i class="fa-solid <?php echo $icon; ?>"></i>
+                <?php } ?>
+              </div>
               <div class="menu-card__body">
                 <h3 class="menu-card__title"><?php echo $name; ?></h3>
                 <p class="menu-card__desc"><?php echo $description; ?></p>

@@ -127,7 +127,7 @@
 
       <div class="form-group">
         <label for="checkout-name">Full Name <span class="required">*</span></label>
-        <input type="text" id="checkout-name" name="customer_name" placeholder="e.g. Arvic Pelinta" required>
+        <input type="text" id="checkout-name" name="customer_name" placeholder="e.g. Juan Dela Cruz" required>
       </div>
 
       <div class="form-group">
